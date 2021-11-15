@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang='en'>
 <head>
@@ -8,14 +9,13 @@
 </head>
 
 <body>
-    
-    <div class="searchFormContainer">
-        <h1 class = welcomeBack>Welcome Back, Admin!</h1>
-        <div id="welcome_content"> 
-            <!-- id can be content? -->
-            {% block welcome_content %}
+    <div class="profile">
+        <h1 class = profile_title>Profile Settings</h4>
+        <div class="profile_column">
+            {% block content %}
             {% endblock %}
         </div>
+        <div class="profile_button"><button class="btn btn-primary profile-button" type="button">Save Profile</button></div>
     </div>
 </body>
 </html>
