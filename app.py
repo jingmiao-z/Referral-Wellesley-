@@ -7,6 +7,10 @@ app = Flask(__name__)
 def index():
     return render_template('mainSearch.html')
 
+@app.route('/announcement')
+def announcement():
+    return render_template('welcome.html')
+
 if __name__ == '__main__':
     import os
     uid = os.getuid()
