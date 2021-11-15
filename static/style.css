@@ -87,3 +87,18 @@ body{
 .header {
   height: 10px;
 }
+
+h1 { 
+  font-family:cursive; 
+  font-size: 45px;
+  font-weight: normal; 
+  line-height: 48px;
+  margin: 0; }
+
+.welcomeBack{
+  color:#5D0DD0;
+}
+
+.dashboard_table{
+  color: black;
+}
