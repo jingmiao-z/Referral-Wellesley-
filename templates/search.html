@@ -1,0 +1,21 @@
+{% extends "mainSearch.html" %}
+{% block content %}
+
+<div class="queryResult">
+    {% if results %}
+        <table>
+            {% for result in results %}
+            <tr data-href=''>
+                <th></th>
+                <th></th>
+              </tr>
+        </table>
+    {% endif %}
+
+    {% if msg %}
+    <h1 class="error">{{ desc }}</h1>
+    <p>{{msg}}</p>
+    {% endif %}
+</div>
+
+{% endblock %}

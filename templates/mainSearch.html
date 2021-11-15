@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang='en'>
+<head>
+    <meta charset='utf-8'>
+    <meta name=author content="Annie Liu">
+    <title>Main Search Page</title>
+    <link rel='stylesheet' href="/static/style.css">
+</head>
+
+<body>
+    <table>
+        <tbody>
+            <tr>
+                header
+            </tr>
+            <tr>
+                <div class = "searchFormContainer">
+                    <h1 class="searchTitle">𝕽𝖊𝖋𝖊𝖗𝖗𝖆𝖑 𝕯𝖆𝖙𝖆𝖇𝖆𝖘𝖊</h1>
+                    <p class="searchSubtitle">referral database</p>
+                    <form class="search" method="GET" action="">
+                        <p><label>Search <input type="text" required name="query" placeholder="Search for job position"></label><br>
+                        <input type="submit" value="Submit"></p>
+                    </form>
+                </div>
+            </tr>
+            <tr>
+                <div class="filter">
+                    <h1>Filter by</h1>
+                    <div class="checkbox">
+                        <label><input type="checkbox" rel="filterByPosition"/>Position</label>
+                    </div>
+                    <div class="checkbox">
+                      <label><input type="checkbox" value="filterByJobType"/>Job Type</label>
+                    </div>
+                    <div class="checkbox">
+                        <label><input type="checkbox" value="filterByCompany"/>Company</label>
+                    </div>
+                    <div class="checkbox">
+                        <label><input type="checkbox" value="filterByLocation"/>Location</label>
+                    </div>
+                  </div>
+            </tr>
+        </tbody> 
+    </table>
+
+    <body id="content">
+        {% block content %}
+        {% endblock %}
+    </body>
+</body>
+</html>

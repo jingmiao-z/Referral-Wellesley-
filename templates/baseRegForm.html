@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang='en'>
+<head>
+    <meta charset='utf-8'>
+    <meta name=author content="Annie Liu">
+    <title>Base Registration Page</title>
+    <link rel='stylesheet' href="/static/style.css">
+</head>
+
+<body>
+    <div class="reg-container">
+        <p class="login-title">Registration</p>
+        <form id="reg-form" method="" action="">
+            <table class="reg-table">
+                <tr>
+                    <td><label for="email">Email</label></td>
+                    <td><input class="regInput" id="email" name="email" placeholder="Email" required></td>
+                </tr>
+                <tr>
+                    <td><label for="password">Password</label></td>
+                    <td><input class="regInput" id="password" name="password" placeholder="Password" required></td>
+                </tr>
+                <tr>
+                    <td><label for="classyear">Class year</label></td>
+                    <td><input class="regInput" id="classyear" type="number" name="classyear" required></td>
+                </tr>
+                <tr>
+                    <td><label for="accountType">Account type</label></td>
+                    <td><select class="regInput" id="accountType" name="accountType" required>
+                        <option value="">select</option>
+                        <option value="Student Account">Student Account</option>
+                        <option value="Referrer Account">Referrer Account</option>
+                        <option value="Admin">Admin</option>
+                    </select></td>
+                </tr>
+            </table>
+            <input class="next" type="submit" value="Next">
+        </form>
+    </div>
+</body>
+</html>

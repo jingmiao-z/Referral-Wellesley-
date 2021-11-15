@@ -1,0 +1,89 @@
+body{
+  font-family: 'Open Sans', sans-serif;
+  background:#F3EBF6;
+  margin: 0 auto 0 auto;  
+  width:100%; 
+  text-align: center;
+  font-size: 15px;
+}
+
+/* Base Login Form */
+.login-title {
+  padding-top: 60px;
+  color: #8C55AA;
+  font-weight: bold;
+  font-size: 25px;
+  padding-bottom: 20px;
+}
+
+.login-container, .reg-container{
+  background-color: #FFFFFF;
+  margin: 8em auto;
+  border-radius: 1.5em;
+  box-shadow: 0px 11px 35px 2px rgba(0, 0, 0, 0.14);
+}
+
+.login-container {
+  width: 400px;
+  height: 400px;
+}
+
+.reg-container {
+  width: 600px;
+  height: 600px;
+}
+
+.loginInfo, .regInput {
+  width: 80%;
+  color: rgb(38, 50, 56);
+  font-weight: 700;
+  letter-spacing: 1px;
+  background: rgba(136, 126, 126, 0.04);
+  padding: 10px;
+  border-radius: 20px;
+  border: 2px solid rgba(0, 0, 0, 0.02);
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.loginInfo:focus, .regInput:focus {
+  border: 2px solid #592693 !important;
+}
+
+.signIn, .signUp, .next{
+  margin-top: 20px;
+  cursor: pointer;
+  border-radius: 5em;
+  color: #fff;
+  background: linear-gradient(to right, #9C27B0, #E040FB);
+  padding-top: 10px;
+  padding-bottom: 10px;
+  text-align: center;
+  width: 100px;
+}
+
+.signUp {
+  margin-left: 30px;
+}
+
+/* Base Registration Form */
+.reg-table {
+  padding-top: 30px;
+  width: 90%;
+}
+
+.next {
+  margin-top: 30px;
+}
+
+/* Base Search Form */
+.searchSubtitle {
+  color:#90A5A8;
+  font-weight:400; 
+  padding:4px 0 15px 0;
+  font-style: italic;
+}
+
+.header {
+  height: 10px;
+}
