@@ -8,7 +8,7 @@ body{
 }
 
 /* Base Login Form */
-.login-title {
+.login-title, .profile_title {
   padding-top: 60px;
   color: #8C55AA;
   font-weight: bold;
@@ -16,7 +16,7 @@ body{
   padding-bottom: 20px;
 }
 
-.login-container, .reg-container{
+.login-container, .reg-container, .profile-container {
   background-color: #FFFFFF;
   margin: 8em auto;
   border-radius: 1.5em;
@@ -31,6 +31,11 @@ body{
 .reg-container {
   width: 600px;
   height: 600px;
+}
+
+.profile-container {
+  width: 600px;
+  height: 650px;
 }
 
 .loginInfo, .regInput {
@@ -50,7 +55,7 @@ body{
   border: 2px solid #592693 !important;
 }
 
-.signIn, .signUp, .next{
+.signIn, .signUp, .next, .save_profile {
   margin-top: 20px;
   cursor: pointer;
   border-radius: 5em;
@@ -70,6 +75,12 @@ body{
 .reg-table {
   padding-top: 30px;
   width: 90%;
+}
+
+.student-table {
+  padding-top: 70px;
+  width: 90%;
+  padding-bottom: 20px;
 }
 
 .next {

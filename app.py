@@ -5,6 +5,10 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
+    return render_template('login.html')
+
+@app.route('/base_registration')
+def base_registration():
     return render_template('baseRegForm.html')
 
 @app.route('/main_search')
@@ -26,7 +30,6 @@ def profile_referrer():
 @app.route('/profile_student')
 def profile_student():
     return render_template('profile_student.html')
-
 
 @app.route('/welcome_admin')
 def welcome_admin():

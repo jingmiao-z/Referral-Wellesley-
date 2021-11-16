@@ -9,13 +9,10 @@
 </head>
 
 <body>
-    <div class="profile">
+    <div class="profile-container">
         <h1 class = profile_title>Profile Settings</h4>
-        <div class="profile_column">
-            {% block content %}
-            {% endblock %}
-        </div>
-        <div class="profile_button"><button class="btn btn-primary profile-button" type="button">Save Profile</button></div>
+        {% block content %}
+        {% endblock %}
     </div>
 </body>
 </html>
