@@ -1,10 +1,26 @@
 {% extends "profile_template.html" %}
 {% block content %}
-<div>
-    <div><label class="labels">Name</label><input type="text" name= "Name" class="form-control" placeholder="Enter Company" value=""></div>
-    <div><label class="labels">Major</label><input type="text" name= "Name" class="form-control" placeholder="Enter Company" value=""></div>
-    <div><label class="labels">Minor</label><input type="text" name= "Company" class="form-control" placeholder="Enter Company" value=""></div>
-    <div><label class="labels">Preferred Location</label><input type="text" name= "Position" class="form-control" placeholder="Enter your Job Position" value=""></div>
-    <div><label class="labels">Description</label><input type="text" name= "Contact Email" class="form-control" placeholder="Enter your email (required)" value=""></div>
-</div>
+
+<form id="student-profile-form" method="" action="">
+    <table class="student-table">
+        <tr>
+            <td><label for="major">Major</label></td>
+            <td><input class="regInput" id="major" name="major" placeholder="Enter Your Major" required></td>
+        </tr>
+        <tr>
+            <td><label for="minor">Minor</label></td>
+            <td><input class="regInput" id="minor" name="minor" placeholder="Enter Your Minor" ></td>
+        </tr>
+        <tr>
+            <td><label for="prefLoc">Preferred Location</label></td>
+            <td><input class="regInput" id="prefLoc" name="prefLoc" placeholder="Enter Your Preferrer Location"></td>
+        </tr>
+        <tr>
+            <td><label for="description">Description</label></td>
+            <td><input class="regInput" id="description" name="description" placeholder="Enter a Description of yourself"></td>
+        </tr>
+    </table>
+    <input class="save_profile" type="submit" value="Save Profile">
+</form>
+
 {% endblock %}
