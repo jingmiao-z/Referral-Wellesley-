@@ -17,28 +17,20 @@
                 <div class = "searchFormContainer">
                     <h1 class="searchTitle">𝕽𝖊𝖋𝖊𝖗𝖗𝖆𝖑 𝕯𝖆𝖙𝖆𝖇𝖆𝖘𝖊</h1>
                     <p class="searchSubtitle">referral database</p>
-                    <form class="search" method="GET" action="">
-                        <p><label>Search <input type="text" required name="query" placeholder="Search for job position"></label><br>
+                    <form class="search" method="POST" action="{{url_for('mainSearch')}}">
+                        <p><label>Search <input type="text" name="query" placeholder="Search for job position" required></label><br>
+                        <fieldset id="radio_button_group" required>
+                            <input type="radio" id="position_name" name="search_by" value="position">
+                            <label for="position_name">Position Name</label>
+                            <input type="radio" id="referrer" name="search_by" value="referrer">
+                            <label for="referrer">Referrer</label>
+                            <input type="radio" id="company" name="search_by" value="company">
+                            <label for="company">Company</label>
+                        </fieldset>
+
                         <input type="submit" value="Submit"></p>
                     </form>
                 </div>
-            </tr>
-            <tr>
-                <div class="filter">
-                    <h1>Filter by</h1>
-                    <div class="checkbox">
-                        <label><input type="checkbox" rel="filterByPosition"/>Position</label>
-                    </div>
-                    <div class="checkbox">
-                      <label><input type="checkbox" value="filterByJobType"/>Job Type</label>
-                    </div>
-                    <div class="checkbox">
-                        <label><input type="checkbox" value="filterByCompany"/>Company</label>
-                    </div>
-                    <div class="checkbox">
-                        <label><input type="checkbox" value="filterByLocation"/>Location</label>
-                    </div>
-                  </div>
             </tr>
         </tbody> 
     </table>

@@ -12,3 +12,4 @@ def getPassword(conn, email):
     if not result:
         return ("","")
     return (result['password'], result['type'])
+
