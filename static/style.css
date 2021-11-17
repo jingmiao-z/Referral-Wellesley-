@@ -8,12 +8,21 @@ body{
 }
 
 /* Base Login Form */
-.login-title, .profile_title {
+.login-title, .profile_title{
   padding-top: 60px;
   color: #8C55AA;
   font-weight: bold;
   font-size: 25px;
   padding-bottom: 20px;
+}
+
+.position_title {
+  padding-top: 60px;
+  color: #8C55AA;
+  font-weight: bold;
+  font-size: 40px;
+  text-align: left;
+  padding-left: 100px;
 }
 
 .login-container, .reg-container, .profile-container {
@@ -36,6 +45,15 @@ body{
 .profile-container {
   width: 600px;
   height: 650px;
+}
+
+.detail-container {
+  background-color: #FFFFFF;
+  margin: 4em auto;
+  border-radius: 1.5em;
+  box-shadow: 0px 11px 35px 2px rgba(0, 0, 0, 0.14);
+  width: 90%;
+  height: 800px;
 }
 
 .loginInfo, .regInput {
@@ -81,6 +99,23 @@ body{
   padding-top: 70px;
   width: 90%;
   padding-bottom: 20px;
+}
+
+.position-table {
+  padding-top: 70px;
+  width: 90%;
+  padding-bottom: 20px;
+}
+
+.detaillabel {
+  width: 30%;
+  font-size: 30px;
+}
+
+.detailInfo {
+  padding-left: 20px;
+  text-align: left;
+  font-size: 20px;
 }
 
 .next {

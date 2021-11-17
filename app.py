@@ -1,42 +1,40 @@
 
-from flask import (Flask, url_for, render_template, request, redirect)
+from flask import (Flask, url_for, render_template, request, redirect, flash)
 import random 
 import bcrypt
 import cs304dbi as dbi
+import login_handler
 
 app = Flask(__name__)
 app.secret_key = 'your secret here'
 # replace that with a random key
 app.secret_key = ''.join([ random.choice(('ABCDEFGHIJKLMNOPQRSTUVXYZ' +
                                           'abcdefghijklmnopqrstuvxyz' +
-                                          '0123456789'))
+                                           '0123456789'))
                            for i in range(20) ])
 
 @app.route('/', methods=['GET','POST'])
 def login():
     conn = dbi.connect()
     if request.method == "GET":
-        print("yo")
         return render_template('login.html')
     elif request.method == 'POST':
-        print("hii")
         if request.form['submit'] == 'Sign In':
             email = request.form['email']
             inputPass = request.form['password']
             print(email,inputPass)
             #find password from db 
-            truePass, user_type = getPassword(conn,email)
+            truePass, user_type = login_handler.getPassword (conn,email)
             if inputPass == truePass:
-                print("true")
-                if user_type == "student":
+                if user_type == "Student":
                     return redirect(url_for('welcome_student'))
-                elif user_type == "referrer":
+                elif user_type == "Referrer":
                     return redirect(url_for('welcome_referrer'))
                 else:
                     return redirect(url_for('welcome_admin'))
             else:
-                print("false")
                 flash("Account not found or incorrect password. Please try again or register.")
+                return render_template('login.html')
         elif request.form['submit'] == 'Sign Up':
             return redirect(url_for('base_registration'))
     
@@ -76,6 +74,16 @@ def profile_referrer():
 def profile_student():
     conn = dbi.connect()
     return render_template('profile_student.html')
+
+@app.route('/mainSearch')
+def mainSearch():
+    conn = dbi.connect()
+    return render_template('mainSearch.html')
+
+@app.route('/position_detail')
+def position_detail():
+    conn = dbi.connect()
+    return render_template('position_detail.html')
 
 @app.before_first_request
 def startup():

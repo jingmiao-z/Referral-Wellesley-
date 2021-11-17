@@ -1,0 +1,32 @@
+{% extends "detail_template.html" %}
+{% block content %}
+
+<div>
+    <h1 class = position_title>Software Engineer</h1>
+    <table class="position-table">
+        <tr>
+            <td class="detaillabel"><label class="positionInfo">Location</label></td>
+            <td class="detailInfo"><p>Boston, MA</p></td>
+        </tr>
+        <tr>
+            <td class="detaillabel"><label class="positionInfo">Company</label></td>
+            <td class="detailInfo"><p>Google</p></td>
+        </tr>
+        <tr>
+            <td class="detaillabel"><label class="positionInfo">Deadline</label></td>
+            <td class="detailInfo"><p>December-12-2021</p></td>
+        </tr>
+        <tr>
+            <td class="detaillabel"><label class="positionInfo">Material Needed</label></td>
+            <td class="detailInfo"><p>Resume</p></td>
+        </tr>
+        <tr>
+            <td class="detaillabel"><label class="positionInfo">Contact Information</label></td>
+            <td class="detailInfo"><p>Linkedin</p></td>
+        </tr>
+    </table>
+
+    <button onclick= "{{ url_for('mainSearch') }}">Back</button>
+</div>
+
+{% endblock %}
