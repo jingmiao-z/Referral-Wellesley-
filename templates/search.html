@@ -4,15 +4,18 @@
 <div class="queryResult">
     {% if results %}
         <table>
+            <th>Position Name</th>
+            <th>Company</th>
+            <th>Referrer</th>
+            <th>View Detail</th>
             {% for result in results %}
-            <tr data-href=''>
-                <th>
-                    
-                </th>
-                <th>
-
-                </th>
-              </tr>
+            <tr>
+                <td>{{result.positionName}}</td>
+                <td>{{result.company}}</td>
+                <td>{{result.referrerName}}</td>
+                <td><button class="detailButton" type="button">View Detail</button>
+            </tr>
+            {% endfor %}
         </table>
     {% endif %}
 

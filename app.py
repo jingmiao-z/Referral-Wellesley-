@@ -100,11 +100,11 @@ def mainSearch():
         if search_by == 'position':
             results = search_handler.searchByPosition(conn, query)            
         elif search_by == 'referrer':
-            referrer_id = search_handler.getReferrerID(conn, query)
-            results = search_handler.searchByReferrer(conn, referrer_id)
+            results = search_handler.searchByReferrer(conn, query)
         else:
             results = search_handler.searchByPosition(conn, query)
         
+        print(results)
         return render_template('search.html', results=results)
 
 @app.route('/position_detail')

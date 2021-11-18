@@ -1,27 +1,50 @@
 {% extends "welcome.html" %}
 {% block welcome_content %}
-<h2 class="dashboard">Your DashBoard</p>
-    <table class = dashboard_table>
-        <tr>
-          <th>Name</th>
-          <th>Details</th>
-          <th>Status</th>
-        </tr>
-        <tr>
-          <td>Ally</td>
-          <td>SWE Application</td>
-          <td>Waiting</td>
-        </tr>
-        <tr>
-            <td>Sally</td>
-            <td>UI/UX Application</td>
-            <td>Accept</td>
-        </tr>
-        <tr>
-            <td>Name_sample</td>
-            <td>UI/UX Application</td>
-            <td>Decline</td>
-        </tr>
-    </table>       
+<h2 class="dashboard">Your DashBoard</h2>
+
+<div class="referrer-dashboard-container">
+  <div class="referrer-dashboard">
+    <table class="dashboard_table">
+      <tr>
+        <th>Name</th>
+        <th>Position Applied</th>
+        <th>Status</th>
+        <th>View Detail</th>
+      </tr>
+      <!-- {% for result in results%} -->
+      <!-- <td>{{result.name}}</td> -->
+      <!-- <td>{{result.position}}</td> -->
+      <!-- default waiting  -->
+      <!-- <td>{{result.status}}</td>  -->
+      <!-- <td><li><button class="nav dropButton" type="button">Tags</button>
+          <div id="tagDropDown" class="dropClickContent">
+              <h2>Click Me</h2>
+          </div>
+      </li></td>  -->
+
+      <!-- {% endfor %} -->
+
+      <tr>
+        <td>Sally</td>
+        <td>UI/UX Application</td>
+        <td>Accept</td>
+        <td><button class="dropButton" type="button">View Detail</button>
+      </tr>
+      <tr>
+        <td>Name_sample</td>
+        <td>UI/UX Application</td>
+        <td>Decline</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="referrer-detail">
+    <ul id="Details">
+      <!-- dynamically put detail info in this-->
+      <!-- accept/decline button-->
+      HELLOEEEEE
+    </ul>
+  </div>
+</div>
 
 {% endblock %}

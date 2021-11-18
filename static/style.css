@@ -152,17 +152,20 @@ h1 {
     padding: 8px;
 }
 
-.dashboard_table tr:nth-child(even) {
-  background-color: #dddddd;
+.dashboard_table {
+  width: 90%;
 }
 
-.dashboard_table table{
+/* .dashboard_table tr:nth-child(even) {
+  background-color: #dddddd;
+} */
+
+/* .dashboard_table table{
   padding-top: 30px;
-  font-family: arial, sans-serif;
   border-collapse: collapse;
   width: 100%;
   text-align: center;
-}
+} */
 
 .dashboard{
   color:purple;
@@ -173,3 +176,20 @@ h1 {
   border-style: double;
 
 }
+
+.referrer-dashboard-container {
+  padding: 20px;
+  margin: auto;
+}
+
+.referrer-dashboard {
+    width: 45%;
+    float: left;
+}
+
+.referrer-detail {
+  width: 45%;
+  float: right;
+  /* padding: 20px; */
+}
+
