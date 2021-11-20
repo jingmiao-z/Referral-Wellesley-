@@ -1,8 +1,9 @@
 
-from flask import (Flask, url_for, render_template, request, redirect, flash)
+from flask import (Flask, url_for, render_template, request, redirect, flash, session, make_response)
 import random 
 import bcrypt
 import cs304dbi as dbi
+from datetime import timedelta
 import login_handler, search_handler, user_reg
 
 app = Flask(__name__)
@@ -12,34 +13,85 @@ app.secret_key = ''.join([ random.choice(('ABCDEFGHIJKLMNOPQRSTUVXYZ' +
                                           'abcdefghijklmnopqrstuvxyz' +
                                            '0123456789'))
                            for i in range(20) ])
+app.permanent_session_lifetime = timedelta(seconds=5)
 
 @app.route('/', methods=['GET','POST'])
 def login():
+    session.permanent = True
     conn = dbi.connect()
-    if request.method == 'GET':
-        return render_template('login.html')
-    elif request.method == 'POST':
-        if request.form['submit'] == 'Sign In':
-            email = request.form['email']
-            inputPass = request.form['password']
-            #find password from db 
-            stored, user_type = login_handler.getPassword (conn,email)
-
-            hashedInput = bcrypt.hashpw(inputPass.encode('utf-8'), stored.encode('utf-8'))
-            hashedInputPass = hashedInput.decode('utf-8')
-            
-            if hashedInputPass == stored:
-                if user_type == 'Student':
-                    return redirect(url_for('welcome_student'))
-                elif user_type == 'Referrer':
-                    return redirect(url_for('welcome_referrer'))
+    # get email and password from cookies
+    cookie_email = request.cookies.get('email')
+    cookie_password = request.cookies.get('password')
+    cookie_account_type = request.cookies.get('account_type')
+    # no cookie set
+    if not cookie_email and not cookie_password:
+        # case 1: first visit
+        if request.method == 'GET':
+            return render_template('login.html', cookies=request.cookies)
+        # case 2: user submitted a form with their name
+        elif request.method == 'POST':
+            # if user clicked sign in button
+            if request.form['submit'] == 'Sign In':
+                email = request.form['email']
+                inputPass = request.form['password']
+                # find password from db 
+                stored, user_type = login_handler.getPassword (conn,email)
+                # hash the input password
+                hashedInput = bcrypt.hashpw(inputPass.encode('utf-8'), stored.encode('utf-8'))
+                hashedInputPass = hashedInput.decode('utf-8')
+                # if hashed input pass is equal to the stored password
+                if hashedInputPass == stored:
+                    if user_type == 'Student':
+                        resp = make_response(
+                            render_template('welcome_student.html',
+                            cookies=request.cookies))
+                        # return redirect(url_for('welcome_student'))
+                    elif user_type == 'Referrer':
+                        resp = make_response(
+                            render_template('welcome_referrer.html',
+                            cookies=request.cookies))
+                        # return redirect(url_for('welcome_referrer'))
+                    else:
+                        resp = make_response(
+                            render_template('welcome_admin.html',
+                            cookies=request.cookies))
+                        # return redirect(url_for('welcome_admin'))
+                    # store cookie to response
+                    resp.set_cookie('email', email)
+                    resp.set_cookie('password', hashedInputPass)
+                    resp.set_cookie('account_type', user_type)
+                    return resp
                 else:
-                    return redirect(url_for('welcome_admin'))
+                    flash("Account not found or incorrect password. Please try again or register.")
+                    return render_template('login.html', cookies=request.cookies)
+            elif request.form['submit'] == 'Sign Up':
+                return redirect(url_for('base_registration'))
+    # cookie is set
+    else:
+        # case 3: a regular visit
+        if request.method == "GET":
+            if account_type == 'Student':
+                resp = make_response(
+                    render_template('welcome_student.html',
+                    cookies=request.cookies))
+            elif account_type == 'Referrer':
+                resp = make_response(
+                    render_template('welcome_referrer.html',
+                    cookies=request.cookies))
             else:
-                flash("Account not found or incorrect password. Please try again or register.")
-                return render_template('login.html')
-        elif request.form['submit'] == 'Sign Up':
-            return redirect(url_for('base_registration'))
+                resp = make_response(
+                    render_template('welcome_admin.html',
+                    cookies=request.cookies))
+        # case 4: time out
+        else:
+            # message
+            resp = make_response(
+                    render_template('login.html',
+                    cookies=request.cookies))
+            resp.set_cookie('email', '', expires=0)
+            resp.set_cookie('password', '', expires=0)
+            resp.set_cookie('account_type', '', expires=0)
+        return resp
     
 @app.route('/base_registration',methods=['GET', 'POST'])
 def base_registration():
@@ -85,6 +137,7 @@ def profile_referrer():
 @app.route('/profile_student')
 def profile_student():
     conn = dbi.connect()
+
     return render_template('profile_student.html')
 
 @app.route('/mainSearch/', methods=['GET', 'POST'])
@@ -102,9 +155,7 @@ def mainSearch():
         elif search_by == 'referrer':
             results = search_handler.searchByReferrer(conn, query)
         else:
-            results = search_handler.searchByPosition(conn, query)
-        
-        print(results)
+            results = search_handler.searchByCompany(conn, query)
         return render_template('search.html', results=results)
 
 @app.route('/position_detail')

@@ -1,7 +1,7 @@
 {% extends "profile_template.html" %}
 {% block content %}
 
-<form id="student-profile-form" method="" action="">
+<form id="student-profile-form" method="POST" action="{{url_for('/')}}">
     <table class="student-table">
         <tr>
             <td><label for="major">Major</label></td>
