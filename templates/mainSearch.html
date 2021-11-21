@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang='en'>
+
 <head>
     <meta charset='utf-8'>
     <meta name=author content="Annie Liu">
@@ -8,31 +9,35 @@
 </head>
 
 <body>
-    <table>
-        <tbody>
-            <tr>
-                header
-            </tr>
-            <tr>
-                <div class = "searchFormContainer">
-                    <h1 class="searchTitle">𝕽𝖊𝖋𝖊𝖗𝖗𝖆𝖑 𝕯𝖆𝖙𝖆𝖇𝖆𝖘𝖊</h1>
-                    <p class="searchSubtitle">referral database</p>
+    <table class="search_table">
+        <tr>
+            <td>
+                <div class="header">
+                    header
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="searchFormContainer">
+                    <h1 class="searchTitle">Referral Database</h1>
+                    <p class="searchSubtitle">Are you looking for a referral? Here is the right place for you!</p>
                     <form class="search" method="POST" action="{{url_for('mainSearch')}}">
-                        <p><label>Search <input type="text" name="query" placeholder="Search for job position" required></label><br>
-                        <fieldset id="radio_button_group" required>
-                            <input type="radio" id="position_name" name="search_by" value="position">
+                        <input class="search_input" aria-label="Search" type="text" name="query"
+                            placeholder="Search for job position" required>
+                        <input type="submit" class="search_btn" value="Search">
+                        <fieldset class="search_by_button_grp" id="radio_button_group">
+                            <input type="radio" id="position_name" name="search_by" value="position" checked>
                             <label for="position_name">Position Name</label>
                             <input type="radio" id="referrer" name="search_by" value="referrer">
                             <label for="referrer">Referrer</label>
                             <input type="radio" id="company" name="search_by" value="company">
                             <label for="company">Company</label>
                         </fieldset>
-
-                        <input type="submit" value="Submit"></p>
                     </form>
                 </div>
-            </tr>
-        </tbody> 
+            </td>
+        </tr>
     </table>
 
     <body id="content">
@@ -40,4 +45,5 @@
         {% endblock %}
     </body>
 </body>
+
 </html>

@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang='en'>
+
 <head>
     <meta charset='utf-8'>
     <meta name=author content="Annie Liu">
@@ -10,23 +11,24 @@
 <body>
     {% with message = get_flashed_messages() %}
     {% if message %}
-        <div id="message">
-            <p>{{message}}</p>
-        </div>
+    <div id="message">
+        <p>{{message}}</p>
+    </div>
     {% endif %}
     {% endwith %}
 
     <div class="login-container">
         <p class="login-title">Sign in</p>
         <form id="login-form" method="POST" action="">
-            <input class="loginInfo" type="text" name="email" placeholder="Email" required>
+            <input class="loginInfo" aria-label="Email" type="text" name="email" placeholder="Email" required>
+            <input class="loginInfo" aria-label="Passowrd" type="text" name="password" placeholder="Password" required>
 
-            <input class="loginInfo" type="text" name="password" placeholder="Password" required>
-                
-            <input class="signIn" name="submit" type="submit" value="Sign In"></input>
-            <input class="signUp" name="submit" type="submit" value="Sign Up"></input>
+            <input class="signIn" name="submit" type="submit" value="Sign In">
+            <a href="{{url_for('base_registration')}}">Sign Up</a>
+            <!-- <input class="signUp" name="submit" type="submit" value="Sign Up"> -->
         </form>
     </div>
     <!-- <a href="#">Forgot Username / Password?</a> -->
 </body>
+
 </html>

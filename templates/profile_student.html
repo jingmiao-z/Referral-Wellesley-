@@ -1,7 +1,7 @@
 {% extends "profile_template.html" %}
 {% block content %}
 
-<form id="student-profile-form" method="POST" action="{{url_for('/')}}">
+<form id="student-profile-form" method="POST" action="">
     <table class="student-table">
         <tr>
             <td><label for="major">Major</label></td>
@@ -18,6 +18,10 @@
         <tr>
             <td><label for="description">Description</label></td>
             <td><input class="regInput" id="description" name="description" placeholder="Enter a Description of yourself"></td>
+        </tr>
+        <tr>
+            <td><label for="resume">Resume</label></td>
+            <td><input type="file" class="fileUpload" id="resume" name="resume"></td>
         </tr>
     </table>
     <input class="save_profile" type="submit" value="Save Profile">

@@ -1,4 +1,6 @@
+
 import cs304dbi as dbi
+
 def insert_user_db(conn,name,email,password,year,account_type):
     '''insert a new user into database, the password here is after salt'''
     try: 
@@ -17,29 +19,47 @@ def user_id(conn,email):
     curs.execute(sql,[email])
     return int(curs.fetchone()["uid"])
 
-def insert_student_profile(conn,sid,name,major,minor,
+def insert_student_profile (conn,sid,name,major,minor,
     file,preferredLocation,description):
     '''insert a new student into database'''
-    curs = dbi.dict_cursor(conn)
-    sql = '''INSERT INTO student (sid, name, major, minor,file,
-    preferredLocation,description) VALUES (%s,%s,%s,%s,%s,%s,%s);'''   
-    curs.execute(sql,[sid,name,major,minor,file,preferredLocation,description])
-    conn.commit() 
+    try: 
+        curs = dbi.dict_cursor(conn)
+        sql = '''INSERT INTO student (sid, name, major, minor,file,
+        preferredLocation,description) VALUES (%s,%s,%s,%s,%s,%s,%s);'''   
+        curs.execute(sql,[sid,name,major,minor,file,preferredLocation,description])
+        conn.commit() 
+    except Exception as err:
+        print('something went wrong', repr(err))
+    
 
 def insert_referrer_profile(conn,rid,name,company,position,
     emailPrefer,otherContact,linkedin,phoneNumber):
-    '''insert a new student into database'''
+    '''insert a new referrer into database'''
+    try: 
+        curs = dbi.dict_cursor(conn)
+        print(rid,name,company,position,emailPrefer,otherContact,linkedin,phoneNumber)
+        sql = '''INSERT INTO referrer (rid,name,company,position,emailPrefer,
+            otherContact,linkedin,phoneNumber) VALUES (%s,%s,%s,%s,%s,%s,%s,%s);'''
+        print(sql)    
+        curs.execute(sql,[rid,name,company,position,
+        emailPrefer,otherContact,linkedin,phoneNumber])
+        conn.commit()
+    except Exception as err:
+        print('something went wrong', repr(err))
+
+def insert_admin_profile(conn,aid):
     curs = dbi.dict_cursor(conn)
-    sql = '''INSERT INTO student (sid, name, major, minor,file,
+    sql = '''INSERT INTO admin (aid, name, major, minor,file,
     preferredLocation,description) VALUES (%s,%s,%s,%s,%s,%s,%s);'''    
     curs.execute(sql,[sid,name,major,minor,file,preferredLocation,description])
     conn.commit()
 
+def retrieve_user(conn, uid):
+    ''' Retrieve user from user table with provided uid '''
+    curs = dbi.dict_cursor(conn)
+    sql = '''select name from user where uid = %s'''
+    curs.execute(sql,[uid])
+    return curs.fetchone()["name"]
+    
 
-def insert_admin_profile(conn,aid):
-    sql = '''INSERT INTO admin (aid, name, major, minor,file,
-    preferredLocation,description) VALUES (%s,%s,%s,%s,%s,%s,%s);'''    
-    curs.execute(sql,[sid,name,major,minor,file,preferredLocation,description])
-
-
-
+    

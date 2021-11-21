@@ -73,7 +73,7 @@ body{
   border: 2px solid #592693 !important;
 }
 
-.signIn, .signUp, .next, .save_profile {
+.signIn, .signUp, .next, .save_profile, .search_btn {
   margin-top: 20px;
   cursor: pointer;
   border-radius: 5em;
@@ -122,16 +122,44 @@ body{
   margin-top: 30px;
 }
 
-/* Base Search Form */
+/* Main Search Form */
 .searchSubtitle {
-  color:#90A5A8;
-  font-weight:400; 
-  padding:4px 0 15px 0;
+  color: rgb(132, 82, 157);
   font-style: italic;
+  font-size: 18px;
+}
+
+.search_input { 
+  background: #fff;
+  height: 30px;
+  border-radius: 2em;
+  border-color: #8C55AA;
+  padding: 10px 20px;
+  margin-left: 10px;
+  cursor: pointer;
+  width: 600px;
+  font-size: 15px;
+}
+
+.searchTitle {
+  padding-top: 20px;
+  color: #8C55AA;
+  font-weight: bold;
+  font-size: 40px;
 }
 
 .header {
-  height: 10px;
+  margin-top: 20px;
+  margin-bottom: 50px;
+}
+
+.search_by_button_grp {
+  border: none;
+  margin-bottom: 30px;
+}
+
+.search_table {
+  width: 100%;
 }
 
 h1 { 
