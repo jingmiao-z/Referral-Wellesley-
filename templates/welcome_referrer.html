@@ -1,8 +1,8 @@
 {% extends "welcome.html" %}
 
 {% block header %}
-<a href="{{ url_for('update_profile') }}">
-  <button name="updateProfile" class="header_btn">Update Profile</button></a>
+<a href="{{ url_for('update_profile') }}" class="header_btn">Update Profile</a>
+<a href="" class="header_btn">New Position</a>
 {% endblock %}
 
 {% block welcome_content %}
@@ -42,6 +42,7 @@
           <td>Name_sample</td>
           <td>UI/UX Application</td>
           <td>Decline</td>
+          <td><button class="dropButton" type="button">View Detail</button>
         </tr>
       </table>
     </div>
@@ -50,7 +51,7 @@
       <ul id="Details">
         <!-- dynamically put detail info in this-->
         <!-- accept/decline button-->
-        HELLOEEEEE
+        <li>"HELLO"<p>
       </ul>
     </div>
   </div>

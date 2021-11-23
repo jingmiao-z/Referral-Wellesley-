@@ -4,12 +4,13 @@
     <meta charset='utf-8'>
     <meta name=author content="Annie Liu">
     <title>Base Detail Page</title>
-    <link rel='stylesheet' href="/static/style.css">
+    <link rel='stylesheet' href="{{ url_for('static',filename = 'style.css') }}">
 </head>
 
 <body>
     <div class="detail-container">
         {% block content %}
         {% endblock %}
+    </div>
 </body>
 </html>

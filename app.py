@@ -1,5 +1,5 @@
 from flask import (Flask, url_for, render_template, request, redirect, flash, session, send_from_directory)
-import sys, os, random 
+import sys, os, random, io 
 import bcrypt
 import cs304dbi as dbi
 from datetime import timedelta
@@ -12,7 +12,6 @@ app.secret_key = ''.join([ random.choice(('ABCDEFGHIJKLMNOPQRSTUVXYZ' +
                                           'abcdefghijklmnopqrstuvxyz' +
                                            '0123456789'))
                            for i in range(20) ])
-app.permanent_session_lifetime = timedelta(minutes=120)
 # This gets us better error messages for certain common request errors
 app.config['TRAP_BAD_REQUEST_ERRORS'] = True
 # new for file upload
@@ -23,7 +22,6 @@ app.config['MAX_CONTENT_LENGTH'] = 1*1024*1024 # 1 MB
 @app.route('/', methods=['GET','POST'])
 def login():
     ''' This is our main login page.'''
-    session.permanent = True
     conn = dbi.connect()
     # get values from cookies
     session_uid = session.get('uid')
@@ -60,8 +58,11 @@ def login():
                             return redirect(url_for('welcome_referrer', uid=uid))
                         else:
                             return redirect(url_for('welcome_admin', uid=uid))
+                    else:
+                        flash("Incorrect password. Please try again.")
+                        return render_template('login.html')
                 else:
-                    flash("Account not found or incorrect password. Please try again or register.")
+                    flash("Account not found. Please register.")
                     return render_template('login.html')
             else:
                 return redirect(url_for('base_registration'))
@@ -145,8 +146,8 @@ def profile_referrer(uid):
         emailPrefer = request.form.get('contactEmail')
         # if email format is invalid
         if not user_reg.check_valid_email(conn, emailPrefer):
-            msg = 'Incorrect email format. Please re-enter.'
-            return render_template('profile_referrer.html', msg=msg)
+            flash('Incorrect email format. Please re-enter.')
+            return render_template('profile_referrer.html')
         linkedin = request.form.get('linkedIn')
         phoneNumber = request.form.get('phnum')
         otherContact = request.form.get('otherContact')
@@ -173,8 +174,8 @@ def profile_student(uid):
             f = request.files['resume']
             # if the format of file is not allowed
             if not user_reg.allowed_file(f.filename):
-                msg = 'Incorrect file format. Only support txt, doc, or pdf.'
-                return render_template('profile_student.html', msg=msg, uid=uid, major ="", 
+                flash('Incorrect file format. Only support txt, doc, or pdf.')
+                return render_template('profile_student.html', uid=uid, major ="", 
                     minor="", loc ="", des="", resume="")
             else:
                 # get the file and save the file
@@ -189,28 +190,33 @@ def profile_student(uid):
                 session['logged_in'] = True
                 return redirect(url_for('welcome_student', uid=uid))
         except Exception as err:
-            msg = 'Upload failed {why}'.format(why=err)
-            return render_template('profile_student.html', msg=msg, uid=uid, major ="", 
+            flash('Upload failed {why}'.format(why=err))
+            return render_template('profile_student.html', uid=uid, major ="", 
                     minor="", loc ="", des="", resume="")
 
 @app.route('/update_profile', methods=['GET','POST'])
 def update_profile():
-    conn = dbi.connect()
+    ''' This method is for profile update'''
     if not session['logged_in']:
         return redirect(url_for('logout'))
+    conn = dbi.connect()
     session_account_type = session['account_type']
     session_uid = session['uid']
+    session_email = session['email']
     if request.method == 'GET': 
+        #render the template with information from the student database
         if session_account_type == "Student":
             dic = update.retrieve_student_profile(conn,session_uid)
             major = dic['major']
             minor = dic['minor']
             resume = dic['file']
-            file = send_from_directory(app.config['UPLOADS'], resume)
+            # file = send_from_directory(app.config['UPLOADS'], resume)
             loc = dic['preferredLocation']
             des = dic['description']
+            uploadMsg = "You already uploaded " + resume
             return render_template("profile_student.html", major = major, 
-                    minor = minor, loc = loc, des= des, resume=file)
+                    minor = minor, loc = loc, des= des, resume=resume, uploadMsg=uploadMsg)
+        #render the template with information from the referrer database
         elif session_account_type == "Referrer":
             dic = update.retrieve_referrer_profile(conn,session_uid)
             company = dic['company']
@@ -223,6 +229,7 @@ def update_profile():
                     position=position,emailPrefer=emailPrefer, otherContact=otherContact, 
                     linkedin=linkedin, phoneNumber=phoneNumber)
     else:
+        #update the profile
         if session_account_type == "Student":
             try:
                 # get parameters from the form
@@ -230,47 +237,73 @@ def update_profile():
                 minor = request.form.get('minor')
                 prefLoc = request.form.get('prefLoc')
                 description = request.form.get('description')
-                name = user_reg.retrieve_user(conn, uid)
+                name = user_reg.retrieve_user(conn, session_uid)
                 f = request.files['resume']
                 if not user_reg.allowed_file(f.filename):
-                    msg = 'Incorrect file format. Only support txt, doc, or pdf.'
-                    return render_template('profile_student.html', msg=msg, uid=uid)
+                    flash('Incorrect file format. Only support txt, doc, or pdf.')
+                    return render_template('profile_student.html', major = major, 
+                    minor = minor, loc = prefLoc, des= description, resume="")
                 else:
                     user_filename = f.filename
                     ext = user_filename.split('.')[-1]
-                    filename = secure_filename('{}.{}'.format(uid,ext))
+                    filename = secure_filename('{}.{}'.format(session_uid,ext))
                     pathname = os.path.join(app.config['UPLOADS'],filename)
                     f.save(pathname)
-                    user_reg.update_student_profile(conn,sid,major,minor,file,loc,des)
-                    return redirect(url_for('welcome_student', uid=uid))
-            except Exception as err:
-                msg = 'Upload failed {why}'.format(why=err)
-                #QQQ: ?
-                return msg 
-                # return render_template('profile_student.html', msg=msg, uid=uid, major ="", 
-                #     minor="", loc ="", des="", resume="")
-        else:
-            return render_template('welcome_student.html', uid=session_uid)
+                    # send_file(returned_file, )
+                    # return send_file(io.BytesIO(returned_file.data))
 
-    
-#QQQ: is this get only? Not sure since students can only check but not post anything right? 
+                    update.update_student_profile(conn,session_uid,major,minor,filename,prefLoc,description)
+                    return redirect(url_for('welcome_student', uid=session_uid))
+            except Exception as err:
+                flash('Upload failed {why}'.format(why=err))
+                return 'incorrect' #redirect to page they are on and they can get a new blank form 
+            #re-render the page filling in all information that they just sent us 
+        elif session_account_type == "Referrer":
+            name = user_reg.retrieve_user(conn, session_uid)
+            company = request.form.get('company')
+            position = request.form.get('position')
+            emailPrefer = request.form.get('contactEmail')
+            linkedin = request.form.get('linkedIn')
+            phoneNumber = request.form.get('phnum')
+            otherContact = request.form.get('otherContact')
+            # if email format is invalid
+            if not user_reg.check_valid_email(conn, emailPrefer):
+                flash('Incorrect email format. Please re-enter.')
+                return render_template('profile_referrer.html', company=company, 
+                    position=position, emailPrefer="", otherContact=otherContact, 
+                    linkedin=linkedin, phoneNumber=phoneNumber)
+            update.update_referrer_profile(conn,session_uid,company,position,
+        emailPrefer,otherContact,linkedin,phoneNumber)
+            return redirect(url_for('welcome_referrer', uid=session_uid))
+
+#QQQ: haven't implemented this yet
+#  is this get only? Not sure since students can only check but not post anything right? 
 @app.route('/welcome_student/<int:uid>' ,methods=['GET', 'POST'])
 def welcome_student(uid):
+    if not session['logged_in']:
+        return redirect(url_for('logout')) 
     conn = dbi.connect()
     return render_template('welcome_student.html', uid=uid)
 
 @app.route('/welcome_referrer/<int:uid>',methods=['GET','Post'])
 def welcome_referrer(uid):
+    if not session['logged_in']:
+        return redirect(url_for('logout')) 
     conn = dbi.connect()
     return render_template('welcome_referrer.html',uid=uid)
 
 @app.route('/welcome_admin/<int:uid>')
 def welcome_admin(uid):
+    if not session['logged_in']:
+        return redirect(url_for('logout')) 
     conn = dbi.connect()
     return render_template('welcome_admin.html')
 
 @app.route('/dashboard', methods=['GET'])
 def dashboard():
+    ''' This method is for redirecting to dashboard'''
+    if not session['logged_in']:
+        return redirect(url_for('logout')) 
     conn = dbi.connect()
     session_account_type = session['account_type']
     session_uid = session['uid']
@@ -281,6 +314,9 @@ def dashboard():
     
 @app.route('/mainSearch/', methods=['GET', 'POST'])
 def mainSearch():
+    ''' This method is for our main search'''
+    if not session['logged_in']:
+        return redirect(url_for('logout')) 
     conn = dbi.connect()
 
     if request.method == 'GET':
@@ -289,12 +325,16 @@ def mainSearch():
         query = request.form['query']
         search_by = request.form['search_by']
         print('You submitted {} and {}'.format(query, search_by))
+        #if the user select search by position
         if search_by == 'position':
-            results = search_handler.searchByPosition(conn, query)            
+            results = search_handler.searchByPosition(conn, query)   
+        #if the user select search by referrer
         elif search_by == 'referrer':
             results = search_handler.searchByReferrer(conn, query)
+        #if the user select search by company
         else:
             results = search_handler.searchByCompany(conn, query)
+        #if there is no result in the database
         if not results:
             desc = 'No results'
             msg = 'Please search another keywords.'
@@ -303,6 +343,8 @@ def mainSearch():
 
 @app.route('/position_detail')
 def position_detail():
+    if not session['logged_in']:
+        return redirect(url_for('logout')) 
     conn = dbi.connect()
     return render_template('position_detail.html')
 

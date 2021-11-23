@@ -1,10 +1,9 @@
 {% extends "welcome.html" %}
 
 {% block header %}
-<a href="{{ url_for('update_profile') }}">
-  <button name="updateProfile" class="header_btn">Update Profile</button></a>
-<a href="{{ url_for('mainSearch') }}">
-  <button name="search_btn" class="header_btn">Search</button></a>
+<a href="{{url_for('update_profile') }}" class="header_btn">Update Profile</a>
+<a href="{{ url_for('mainSearch')}}" class="header_btn">Search</a>
+
 {% endblock %}
 
 {% block welcome_content %}

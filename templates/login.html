@@ -5,7 +5,7 @@
     <meta charset='utf-8'>
     <meta name=author content="Annie Liu">
     <title>Main Sign In Page</title>
-    <link rel='stylesheet' href="/static/style.css">
+    <link rel='stylesheet' href="{{ url_for('static',filename = 'style.css') }}">
 </head>
 
 <body>
@@ -19,13 +19,13 @@
 
     <div class="login-container">
         <p class="login-title">Sign in</p>
-        <form id="login-form" method="POST" action="">
+        <form id="login-form" method="POST" action = "{{url_for('login')}}">
             <input class="loginInfo" aria-label="Email" type="text" name="email" placeholder="Email" required>
             <input class="loginInfo" aria-label="Passowrd" type="text" name="password" placeholder="Password" required>
 
             <input class="signIn" name="submit" type="submit" value="Sign In">
         </form>
-        <a href="{{url_for('base_registration')}}"><button class="signUp">Sign Up</button></a>
+        <a href="{{url_for('base_registration')}}" class="signUp">Sign Up</a>
     </div>
     <!-- <a href="#">Forgot Username / Password?</a> -->
 </body>

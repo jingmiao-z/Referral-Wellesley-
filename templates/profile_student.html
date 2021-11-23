@@ -1,36 +1,45 @@
 {% extends "profile_template.html" %}
 {% block content %}
 
-{% if msg %}
-    <p class='error'>{{msg}}</p>
+{% with message = get_flashed_messages() %}
+{% if message %}
+<div id="message">
+    <p class="error">{{message}}</p>
+</div>
 {% endif %}
+{% endwith %}
 
-<form id="student-profile-form" method="POST" action="" enctype="multipart/form-data">
+<form id="student-profile-form" method="POST" action = "{{url_for('profile_student')}}" enctype="multipart/form-data">
     <table class="student-table">
         <tr>
             <td><label for="major">Major<span class="required">*</span></label></td>
-            <td><input class="regInput" id="major" name="major" placeholder="Enter Your Major" value = "{{major}}" required></td>
+            <td><input class="regInput" id="major" name="major" placeholder="Enter Your Major" value="{{major}}"
+                    required></td>
         </tr>
         <tr>
             <td><label for="minor">Minor</label></td>
-            <td><input class="regInput" id="minor" name="minor" placeholder="Enter Your Minor" value = "{{minor}}" ></td>
+            <td><input class="regInput" id="minor" name="minor" placeholder="Enter Your Minor" value="{{minor}}"></td>
         </tr>
         <tr>
             <td><label for="prefLoc">Preferred Location</label></td>
-            <td><input class="regInput" id="prefLoc" name="prefLoc" placeholder="Enter Your Preferrer Location" value = "{{loc}}"></td>
+            <td><input class="regInput" id="prefLoc" name="prefLoc" placeholder="Enter Your Preferrer Location"
+                    value="{{loc}}"></td>
         </tr>
         <tr>
             <td><label for="description">Description</label></td>
-            <td><input class="regInput" id="description" name="description" placeholder="Enter a Description of yourself" value = "{{des}}"></td>
+            <td><input class="regInput" id="description" name="description"
+                    placeholder="Enter a Description of yourself" value="{{des}}"></td>
         </tr>
         <tr>
             <td><label for="resume">Resume<span class="required">*</span></label></td>
-            <td><input type="file" class="fileUpload" id="resume" name="resume" value = "{{resume}}" required>
-            <p>You already uploaded {{resume}}</p></td>
+            <td><input type="file" class="fileUpload" id="resume" name="resume" value="{{resume}}" required>
+                {% if uploadMsg %}
+                    <p>{{uploadMsg}}</p>
+                {% endif %}
+            </td>
         </tr>
     </table>
     <input class="save_profile" type="submit" value="Save Profile">
 </form>
 
 {% endblock %}
- 

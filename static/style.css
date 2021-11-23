@@ -13,15 +13,21 @@ body{
   padding-right: 20px;
 }
 
-.header_btn {
+.header_btn, .signUp {
   cursor: pointer;
   border-radius: 5em;
   color: #fff;
   background: linear-gradient(to right, #9C27B0, #E040FB);
-  padding-top: 8px;
-  padding-bottom: 8px;
-  width: 130px;
-  margin-bottom: 20px;
+  text-decoration: none;
+}
+
+.header_btn {
+  padding: 10px 15px;
+}
+
+.signUp {
+  font-size: 15px;
+  padding: 10px 20px;
 }
 
 /* Base Login Form */
@@ -90,7 +96,7 @@ body{
   border: 2px solid #592693 !important;
 }
 
-.signIn, .signUp, .next, .save_profile, .search_btn{
+.signIn, .next, .save_profile, .search_btn{
   margin-top: 20px;
   cursor: pointer;
   border-radius: 5em;
@@ -100,6 +106,11 @@ body{
   padding-bottom: 10px;
   text-align: center;
   width: 100px;
+}
+
+.signIn {
+  font-size: 15px;
+  margin-bottom: 20px;
 }
 
 /* Base Registration Form */
@@ -171,8 +182,13 @@ body{
   margin-bottom: 30px;
 }
 
-.search_table {
+.search_table, .search_result {
   width: 100%;
+}
+
+.search_result {
+  padding-left: 50px;
+  padding-right: 50px;
 }
 
 h1 { 
@@ -184,10 +200,11 @@ h1 {
 }
 
 .welcomeBack{
+  margin-top: 20px;
   color:#5D0DD0;
 }
 
-.dashboard_table td,th{
+.dashboard_table td,th, .search_result td, th{
     border: 1px solid #dddddd;
     text-align: left;
     padding: 8px;
@@ -197,18 +214,7 @@ h1 {
   width: 90%;
 }
 
-/* .dashboard_table tr:nth-child(even) {
-  background-color: #dddddd;
-} */
-
-/* .dashboard_table table{
-  padding-top: 30px;
-  border-collapse: collapse;
-  width: 100%;
-  text-align: center;
-} */
-
-.dashboard{
+.dashboard {
   color:purple;
 }
 

@@ -20,17 +20,18 @@ def retrieve_referrer_profile(conn, uid):
 def update_student_profile(conn,sid,major,minor,file,loc,des):
     ''' Update student profile using sid '''
     curs = dbi.dict_cursor(conn)
-    sql = ''' update referrer set 
-            (major=%s, minor=%s, file=%s, preferredLocation=%s, description=%s) 
-            where sid=%s'''
+    sql = ''' update student set 
+            major=%s, minor=%s, file=%s, preferredLocation=%s, description=%s 
+            where sid=%s '''
     curs.execute(sql,[major,minor,file,loc,des,sid])
     conn.commit()
 
-def update_referrer_profile(conn,rid,company,position,contactEmail,linkedIn,phnum):
+def update_referrer_profile(conn,rid,company,position,emailPrefer,otherContact,linkedin,phoneNumber):
     ''' Update Referrer profile using rid '''
     curs = dbi.dict_cursor(conn)
     sql = ''' update referrer set 
-            (major=%s, minor=%s, file=%s, preferredLocation=%s, description=%s) 
+            company=%s, position=%s, emailPrefer=%s, otherContact=%s, 
+            linkedin=%s, phoneNumber=%s
             where rid=%s'''
-    curs.execute(sql,[major,minor,file,loc,des,rid])
+    curs.execute(sql,[company,position,emailPrefer,otherContact,linkedin,phoneNumber,rid])
     conn.commit()
