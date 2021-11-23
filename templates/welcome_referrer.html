@@ -1,49 +1,58 @@
 {% extends "welcome.html" %}
-{% block welcome_content %}
-<h2 class="dashboard">Your DashBoard</h2>
 
-<div class="referrer-dashboard-container">
-  <div class="referrer-dashboard">
-    <table class="dashboard_table">
-      <tr>
-        <th>Name</th>
-        <th>Position Applied</th>
-        <th>Status</th>
-        <th>View Detail</th>
-      </tr>
-      <!-- {% for result in results%} -->
-      <!-- <td>{{result.name}}</td> -->
-      <!-- <td>{{result.position}}</td> -->
-      <!-- default waiting  -->
-      <!-- <td>{{result.status}}</td>  -->
-      <!-- <td><li><button class="nav dropButton" type="button">Tags</button>
+{% block header %}
+<a href="{{ url_for('update_profile') }}">
+  <button name="updateProfile" class="header_btn">Update Profile</button></a>
+{% endblock %}
+
+{% block welcome_content %}
+<div>
+  <h1 class=welcomeBack>Welcome Back, Referrer!</h1>
+  <h2 class="dashboard">Your DashBoard</h2>
+
+  <div class="referrer-dashboard-container">
+    <div class="referrer-dashboard">
+      <table class="dashboard_table">
+        <tr>
+          <th>Name</th>
+          <th>Position Applied</th>
+          <th>Status</th>
+          <th>View Detail</th>
+        </tr>
+        <!-- {% for result in results%} -->
+        <!-- <td>{{result.name}}</td> -->
+        <!-- <td>{{result.position}}</td> -->
+        <!-- default waiting  -->
+        <!-- <td>{{result.status}}</td>  -->
+        <!-- <td><li><button class="nav dropButton" type="button">Tags</button>
           <div id="tagDropDown" class="dropClickContent">
               <h2>Click Me</h2>
           </div>
       </li></td>  -->
 
-      <!-- {% endfor %} -->
+        <!-- {% endfor %} -->
 
-      <tr>
-        <td>Sally</td>
-        <td>UI/UX Application</td>
-        <td>Accept</td>
-        <td><button class="dropButton" type="button">View Detail</button>
-      </tr>
-      <tr>
-        <td>Name_sample</td>
-        <td>UI/UX Application</td>
-        <td>Decline</td>
-      </tr>
-    </table>
-  </div>
+        <tr>
+          <td>Sally</td>
+          <td>UI/UX Application</td>
+          <td>Accept</td>
+          <td><button class="dropButton" type="button">View Detail</button>
+        </tr>
+        <tr>
+          <td>Name_sample</td>
+          <td>UI/UX Application</td>
+          <td>Decline</td>
+        </tr>
+      </table>
+    </div>
 
-  <div class="referrer-detail">
-    <ul id="Details">
-      <!-- dynamically put detail info in this-->
-      <!-- accept/decline button-->
-      HELLOEEEEE
-    </ul>
+    <div class="referrer-detail">
+      <ul id="Details">
+        <!-- dynamically put detail info in this-->
+        <!-- accept/decline button-->
+        HELLOEEEEE
+      </ul>
+    </div>
   </div>
 </div>
 

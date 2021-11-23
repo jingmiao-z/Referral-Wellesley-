@@ -1,30 +1,37 @@
 {% extends "profile_template.html" %}
 {% block content %}
+
+{% if msg %}
+    <div id='message'>
+        <p class='error'>{{msg}}</p>
+    </div>
+{% endif %}
+
 <form id="referrer-profile-form" method="POST" action="">
     <table class="reg-table">
         <tr>
-            <td><label for="company">Company</label></td>
+            <td><label for="company">Company<span class="required">*</span></label></td>
             <td><input class="regInput" id="company" name="company" placeholder="Enter Company" required></td>
         </tr>
         <tr>
-            <td><label for="position">Position</label></td>
+            <td><label for="position">Position<span class="required">*</span></label></td>
             <td><input class="regInput" id="position" name="position" placeholder="Enter your Job Position" required></td>
         </tr>
         <tr>
-            <td><label for="contactEmail">Contact Email</label></td>
-            <td><input class="regInput" id="contactEmail" name="contactEmail" placeholder="Enter your email (required)" required></td>
+            <td><label for="contactEmail">Contact Email<span class="required">*</span></label></td>
+            <td><input class="regInput" id="contactEmail" name="contactEmail" placeholder="Enter your email" required></td>
         </tr>
         <tr>
             <td><label for="linkedIn">LinkedIn</label></td>
-            <td><input class="regInput" id="linkedIn" name="linkedIn" placeholder="Enter your linkedin profile link (optional)"></td>
+            <td><input class="regInput" id="linkedIn" name="linkedIn" placeholder="Enter your linkedin profile link"></td>
         </tr>
         <tr>
             <td><label for="phnum">Phone Number</label></td>
-            <td><input class="regInput" id="phnum" name="phnum" type="number" placeholder="Enter Phone number (optional)"></td>
+            <td><input class="regInput" id="phnum" name="phnum" type="number" placeholder="Enter Phone number"></td>
         </tr>
         <tr>
             <td><label for="otherContact">Other Contact Method</label></td>
-            <td><input class="regInput" id="otherContact" name="otherContact" placeholder="Enter other contact method (optional)"></td>
+            <td><input class="regInput" id="otherContact" name="otherContact" placeholder="Enter other contact method"></td>
         </tr>
     </table>
     <input class="save_profile" type="submit" value="Save Profile">

@@ -1,46 +1,41 @@
 
 import cs304dbi as dbi
+import re
+
+regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'doc'}
 
 def insert_user_db(conn,name,email,password,year,account_type):
     '''insert a new user into database, the password here is after salt'''
     try: 
         curs = dbi.dict_cursor(conn)
         sql = '''INSERT INTO user (name, email, password,
-        classYear,type) VALUES (%s,%s,%s,%s,%s);'''
+        classYear,type) VALUES (%s,%s,%s,%s,%s)'''
         curs.execute(sql,[name,email,password,year,account_type])
         conn.commit()
     except Exception as err:
         print('something went wrong', repr(err))
-
-def user_id(conn,email):
-    '''return user's id as a int given email'''
-    curs = dbi.dict_cursor(conn)
-    sql = "select uid from user where email = %s"
-    curs.execute(sql,[email])
-    return int(curs.fetchone()["uid"])
-
+        
 def insert_student_profile (conn,sid,name,major,minor,
     file,preferredLocation,description):
     '''insert a new student into database'''
     try: 
         curs = dbi.dict_cursor(conn)
-        sql = '''INSERT INTO student (sid, name, major, minor,file,
-        preferredLocation,description) VALUES (%s,%s,%s,%s,%s,%s,%s);'''   
+        sql = '''INSERT INTO student (sid, name, major, minor, file,
+        preferredLocation,description) VALUES (%s,%s,%s,%s,%s,%s,%s)'''   
         curs.execute(sql,[sid,name,major,minor,file,preferredLocation,description])
-        conn.commit() 
+        conn.commit()
     except Exception as err:
         print('something went wrong', repr(err))
-    
 
 def insert_referrer_profile(conn,rid,name,company,position,
     emailPrefer,otherContact,linkedin,phoneNumber):
     '''insert a new referrer into database'''
     try: 
         curs = dbi.dict_cursor(conn)
-        print(rid,name,company,position,emailPrefer,otherContact,linkedin,phoneNumber)
         sql = '''INSERT INTO referrer (rid,name,company,position,emailPrefer,
-            otherContact,linkedin,phoneNumber) VALUES (%s,%s,%s,%s,%s,%s,%s,%s);'''
-        print(sql)    
+            otherContact,linkedin,phoneNumber) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)'''
         curs.execute(sql,[rid,name,company,position,
         emailPrefer,otherContact,linkedin,phoneNumber])
         conn.commit()
@@ -48,18 +43,50 @@ def insert_referrer_profile(conn,rid,name,company,position,
         print('something went wrong', repr(err))
 
 def insert_admin_profile(conn,aid):
+    ''' Retreive admin from admin table with provided aid'''
     curs = dbi.dict_cursor(conn)
     sql = '''INSERT INTO admin (aid, name, major, minor,file,
-    preferredLocation,description) VALUES (%s,%s,%s,%s,%s,%s,%s);'''    
+    preferredLocation,description) VALUES (%s,%s,%s,%s,%s,%s,%s)'''    
     curs.execute(sql,[sid,name,major,minor,file,preferredLocation,description])
     conn.commit()
 
 def retrieve_user(conn, uid):
-    ''' Retrieve user from user table with provided uid '''
+    ''' Retrieve user name from user table with provided uid '''
     curs = dbi.dict_cursor(conn)
     sql = '''select name from user where uid = %s'''
     curs.execute(sql,[uid])
     return curs.fetchone()["name"]
-    
 
-    
+def allowed_file(filename):
+    ''' Determine whether the file is allowed '''
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+def retrieve_uid(conn, email):
+    ''' Retrieve uid from user table with provided email, if not exist, return None '''
+    curs = dbi.dict_cursor(conn)
+    sql = '''select uid from user where email = %s'''
+    curs.execute(sql,[email])
+    dic = curs.fetchone()
+    if dic != None:
+        return dic["uid"]
+    else:
+        return dic
+
+def check_email(conn,email):
+    '''Check if email already in db, return true if it exists'''
+    curs = dbi.dict_cursor(conn)
+    sql = '''select email from user where email = %s'''
+    curs.execute(sql,[email])
+    if curs.fetchone() != None:
+        return True
+    else:
+        return False
+
+def check_valid_email(conn, email):
+    ''' Check if email is in valid format '''
+    if(re.fullmatch(regex, email)):
+        return True
+    else:
+        print("Invalid Email")
+        return False

@@ -20,8 +20,10 @@
     {% endif %}
 
     {% if msg %}
-    <h1 class="error">{{ desc }}</h1>
-    <p>{{msg}}</p>
+    <div id="message">
+        <h1 class="error">{{ desc }}</h1>
+        <p class="error">{{msg}}</p>
+    </div>
     {% endif %}
 </div>
 

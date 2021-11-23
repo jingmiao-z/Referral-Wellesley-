@@ -1,21 +1,11 @@
-<!doctype html>
-<html lang='en'>
-<head>
-    <meta charset='utf-8'>
-    <meta name=author content="Michelle Zhao">
-    <title>Welcome Page Template</title>
-    <link rel='stylesheet' href="/static/style.css">
-</head>
+{% extends "baseHeader.html" %}
+{% block main %}
 
-<body>
-    
-    <div class="searchFormContainer">
-        <h1 class = welcomeBack>Welcome Back, Admin!</h1>
-        <div id="welcome_content"> 
-            <!-- id can be content? -->
-            {% block welcome_content %}
-            {% endblock %}
-        </div>
+<div class="searchFormContainer">
+    <div id="welcome_content">
+        {% block welcome_content %}
+        {% endblock %}
     </div>
-</body>
-</html>
+</div>
+
+{% endblock %}

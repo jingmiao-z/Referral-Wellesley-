@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang='en'>
+
+<head>
+    <meta charset='utf-8'>
+    <meta name=author content="Annie Liu and Michelle Zhao">
+    <title>Base Header</title>
+    <link rel='stylesheet' href="/static/style.css">
+</head>
+
+<body>
+    <div class="base_header">
+        <a href="">
+            <button name="messageCenter" class="header_btn">Message Center</button></a>
+        <a href="{{ url_for('dashboard') }}">
+            <button name="dashboard" class="header_btn">Dashboard</button></a>
+        <a href="{{ url_for('logout') }}">
+            <button name="logout" class="header_btn">Log out</button></a>
+        {% block header %}
+        {% endblock %}
+    </div>
+
+    <div id="main">
+        {% block main %}
+        {% endblock %}
+    </div>
+
+</body>

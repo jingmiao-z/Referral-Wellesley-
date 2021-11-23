@@ -1,30 +1,36 @@
 {% extends "profile_template.html" %}
 {% block content %}
 
-<form id="student-profile-form" method="POST" action="">
+{% if msg %}
+    <p class='error'>{{msg}}</p>
+{% endif %}
+
+<form id="student-profile-form" method="POST" action="" enctype="multipart/form-data">
     <table class="student-table">
         <tr>
-            <td><label for="major">Major</label></td>
-            <td><input class="regInput" id="major" name="major" placeholder="Enter Your Major" required></td>
+            <td><label for="major">Major<span class="required">*</span></label></td>
+            <td><input class="regInput" id="major" name="major" placeholder="Enter Your Major" value = "{{major}}" required></td>
         </tr>
         <tr>
             <td><label for="minor">Minor</label></td>
-            <td><input class="regInput" id="minor" name="minor" placeholder="Enter Your Minor" ></td>
+            <td><input class="regInput" id="minor" name="minor" placeholder="Enter Your Minor" value = "{{minor}}" ></td>
         </tr>
         <tr>
             <td><label for="prefLoc">Preferred Location</label></td>
-            <td><input class="regInput" id="prefLoc" name="prefLoc" placeholder="Enter Your Preferrer Location"></td>
+            <td><input class="regInput" id="prefLoc" name="prefLoc" placeholder="Enter Your Preferrer Location" value = "{{loc}}"></td>
         </tr>
         <tr>
             <td><label for="description">Description</label></td>
-            <td><input class="regInput" id="description" name="description" placeholder="Enter a Description of yourself"></td>
+            <td><input class="regInput" id="description" name="description" placeholder="Enter a Description of yourself" value = "{{des}}"></td>
         </tr>
         <tr>
-            <td><label for="resume">Resume</label></td>
-            <td><input type="file" class="fileUpload" id="resume" name="resume"></td>
+            <td><label for="resume">Resume<span class="required">*</span></label></td>
+            <td><input type="file" class="fileUpload" id="resume" name="resume" value = "{{resume}}" required>
+            <p>You already uploaded {{resume}}</p></td>
         </tr>
     </table>
     <input class="save_profile" type="submit" value="Save Profile">
 </form>
 
 {% endblock %}
+ 
