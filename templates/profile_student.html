@@ -9,7 +9,12 @@
 {% endif %}
 {% endwith %}
 
-<form id="student-profile-form" method="POST" action = "{{url_for('profile_student')}}" enctype="multipart/form-data">
+{% if is_update %}
+<form id="student-profile-form" method="POST" action = "{{url_for('update_profile',uid = uid)}}" enctype="multipart/form-data">
+{% endif %}
+{% if not is_update%}
+<form id="student-profile-form" method="POST" action = "{{url_for('profile_student',uid = uid)}}" enctype="multipart/form-data">
+{% endif %}
     <table class="student-table">
         <tr>
             <td><label for="major">Major<span class="required">*</span></label></td>
@@ -33,10 +38,6 @@
         <tr>
             <td><label for="resume">Resume<span class="required">*</span></label></td>
             <td><input type="file" class="fileUpload" id="resume" name="resume" value="{{resume}}" required>
-                {% if uploadMsg %}
-                    <p>{{uploadMsg}}</p>
-                {% endif %}
-            </td>
         </tr>
     </table>
     <input class="save_profile" type="submit" value="Save Profile">

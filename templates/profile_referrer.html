@@ -9,7 +9,13 @@
 {% endif %}
 {% endwith %}
 
-<form id="referrer-profile-form" method="POST" action="{{url_for('profile_referrer')}}">
+{% if is_update %}
+<form id="referrer-profile-form" method="POST" action="{{url_for('update_profile', uid = uid )}}">
+{% endif %}
+
+{% if not is_update%}
+<form id="referrer-profile-form" method="POST" action="{{url_for('profile_referrer', uid = uid )}}">
+{% endif %}
     <table class="reg-table">
         <tr>
             <td><label for="company">Company<span class="required">*</span></label></td>

@@ -136,7 +136,7 @@ def profile_referrer(uid):
     ''' This is our profile page for referrer. ''' 
     conn = dbi.connect()
     if request.method == 'GET':
-        return render_template('profile_referrer.html', company="", 
+        return render_template('profile_referrer.html', uid = uid, company="", 
                     position="",emailPrefer="", otherContact="", 
                     linkedin="", phoneNumber="")
     else:
@@ -175,7 +175,7 @@ def profile_student(uid):
             # if the format of file is not allowed
             if not user_reg.allowed_file(f.filename):
                 flash('Incorrect file format. Only support txt, doc, or pdf.')
-                return render_template('profile_student.html', uid=uid, major ="", 
+                return render_template('profile_student.html', is_update= False, uid=uid, major ="", 
                     minor="", loc ="", des="", resume="")
             else:
                 # get the file and save the file
@@ -191,7 +191,8 @@ def profile_student(uid):
                 return redirect(url_for('welcome_student', uid=uid))
         except Exception as err:
             flash('Upload failed {why}'.format(why=err))
-            return render_template('profile_student.html', uid=uid, major ="", 
+            #although we can retrieve user's input (which is a better way to implement), we'll give students a blank form for now 
+            return render_template('profile_student.html', is_update= False,  uid = uid, major ="", 
                     minor="", loc ="", des="", resume="")
 
 @app.route('/update_profile', methods=['GET','POST'])
@@ -213,8 +214,7 @@ def update_profile():
             # file = send_from_directory(app.config['UPLOADS'], resume)
             loc = dic['preferredLocation']
             des = dic['description']
-            uploadMsg = "You already uploaded " + resume
-            return render_template("profile_student.html", major = major, 
+            return render_template("profile_student.html", is_update= True, uid = session_uid, major = major, 
                     minor = minor, loc = loc, des= des, resume=resume, uploadMsg=uploadMsg)
         #render the template with information from the referrer database
         elif session_account_type == "Referrer":
@@ -225,7 +225,7 @@ def update_profile():
             otherContact = dic['otherContact']
             linkedin = dic['linkedin']
             phoneNumber = dic['phoneNumber']
-            return render_template('profile_referrer.html', company=company, 
+            return render_template('profile_referrer.html', is_update= True, uid = session_uid, company=company, 
                     position=position,emailPrefer=emailPrefer, otherContact=otherContact, 
                     linkedin=linkedin, phoneNumber=phoneNumber)
     else:
@@ -241,7 +241,7 @@ def update_profile():
                 f = request.files['resume']
                 if not user_reg.allowed_file(f.filename):
                     flash('Incorrect file format. Only support txt, doc, or pdf.')
-                    return render_template('profile_student.html', major = major, 
+                    return render_template('profile_student.html', is_update= True, uid = session_uid, major = major, 
                     minor = minor, loc = prefLoc, des= description, resume="")
                 else:
                     user_filename = f.filename
@@ -256,7 +256,9 @@ def update_profile():
                     return redirect(url_for('welcome_student', uid=session_uid))
             except Exception as err:
                 flash('Upload failed {why}'.format(why=err))
-                return 'incorrect' #redirect to page they are on and they can get a new blank form 
+                #although we can retrieve user's input (which is a better way to implement), we'll give students a blank form for now 
+                return render_template('profile_student.html', is_update= True, uid = session_uid, major ="", 
+                    minor="", loc ="", des="", resume="") #redirect to page they are on and they can get a new blank form 
             #re-render the page filling in all information that they just sent us 
         elif session_account_type == "Referrer":
             name = user_reg.retrieve_user(conn, session_uid)
@@ -269,7 +271,7 @@ def update_profile():
             # if email format is invalid
             if not user_reg.check_valid_email(conn, emailPrefer):
                 flash('Incorrect email format. Please re-enter.')
-                return render_template('profile_referrer.html', company=company, 
+                return render_template('profile_referrer.html', is_update = True, uid=session_uid, company=company, 
                     position=position, emailPrefer="", otherContact=otherContact, 
                     linkedin=linkedin, phoneNumber=phoneNumber)
             update.update_referrer_profile(conn,session_uid,company,position,
