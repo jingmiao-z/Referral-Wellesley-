@@ -215,7 +215,7 @@ def update_profile():
             loc = dic['preferredLocation']
             des = dic['description']
             return render_template("profile_student.html", is_update= True, uid = session_uid, major = major, 
-                    minor = minor, loc = loc, des= des, resume=resume, uploadMsg=uploadMsg)
+                    minor = minor, loc = loc, des= des, resume=resume)
         #render the template with information from the referrer database
         elif session_account_type == "Referrer":
             dic = update.retrieve_referrer_profile(conn,session_uid)
