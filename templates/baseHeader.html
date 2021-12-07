@@ -10,10 +10,8 @@
 
 <body>
     <div class="base_header">
-        <a href="" class="header_btn">Message Center</a>
         <a href="{{ url_for('dashboard') }}" class="header_btn">Dashboard</a>
         <a href="{{ url_for('logout') }}" class="header_btn">Logout</a>
-
         {% block header %}
         {% endblock %}
     </div>
@@ -23,4 +21,6 @@
         {% endblock %}
     </div>
 
+    <script src="{{ url_for('static',filename = 'messageCenter.js') }}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </body>

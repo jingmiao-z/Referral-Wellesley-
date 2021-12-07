@@ -1,8 +1,8 @@
-body{
+body {
   font-family: 'Open Sans', sans-serif;
   background:#F3EBF6;
   margin: 0 auto 0 auto;  
-  width:100%; 
+  width: 100%; 
   text-align: center;
   font-size: 15px;
 }
@@ -13,7 +13,7 @@ body{
   padding-right: 20px;
 }
 
-.header_btn, .signUp {
+.header_btn, .signUp, .dropdown_btn, .detail_btn {
   cursor: pointer;
   border-radius: 5em;
   color: #fff;
@@ -21,8 +21,19 @@ body{
   text-decoration: none;
 }
 
-.header_btn {
+.header_btn, .dropdown_btn {
   padding: 10px 15px;
+  font-size: 15px;
+}
+
+.dropdown_btn{
+  margin-top: 0px;
+}
+
+.detail_btn {
+  padding: 20px 35px;
+  margin: 10px;
+  font-size: 18px;
 }
 
 .signUp {
@@ -30,7 +41,6 @@ body{
   padding: 10px 20px;
 }
 
-/* Base Login Form */
 .login-title, .profile_title{
   padding-top: 60px;
   color: #8C55AA;
@@ -48,7 +58,7 @@ body{
   padding-left: 100px;
 }
 
-.login-container, .reg-container, .profile-container {
+.login-container, .reg-container, .profile-container, .refer-container, .change-container{
   background-color: #FFFFFF;
   margin: 8em auto;
   border-radius: 1.5em;
@@ -60,7 +70,7 @@ body{
   height: 400px;
 }
 
-.reg-container {
+.reg-container, .refer-container {
   width: 600px;
   height: 600px;
 }
@@ -76,10 +86,10 @@ body{
   border-radius: 1.5em;
   box-shadow: 0px 11px 35px 2px rgba(0, 0, 0, 0.14);
   width: 90%;
-  height: 800px;
+  height: 1000px;
 }
 
-.loginInfo, .regInput {
+.loginInfo, .regInput, .referInput{
   width: 80%;
   color: rgb(38, 50, 56);
   font-weight: 700;
@@ -89,14 +99,22 @@ body{
   border-radius: 20px;
   border: 2px solid rgba(0, 0, 0, 0.02);
   margin-bottom: 20px;
+}
+
+.loginInfo, .regInput {
   text-align: center;
 }
 
-.loginInfo:focus, .regInput:focus {
+.referInput {
+  text-align: left;
+  line-height:20px;
+}
+
+.loginInfo:focus, .regInput:focus, .referInput:focus {
   border: 2px solid #592693 !important;
 }
 
-.signIn, .next, .save_profile, .search_btn{
+.signIn, .next, .save_profile, .search_btn, .status{
   margin-top: 20px;
   cursor: pointer;
   border-radius: 5em;
@@ -108,32 +126,40 @@ body{
   width: 100px;
 }
 
-.signIn {
+.status {
+  margin-left: 20px;
+}
+
+.signIn, .status {
   font-size: 15px;
   margin-bottom: 20px;
 }
 
-/* Base Registration Form */
+
 .reg-table {
   padding-top: 30px;
   width: 90%;
 }
 
-.student-table {
+.student-table, .referral-info-table {
   padding-top: 70px;
   width: 90%;
   padding-bottom: 20px;
 }
 
 .position-table {
-  padding-top: 70px;
+  padding-top: 50px;
   width: 90%;
-  padding-bottom: 20px;
+  padding-bottom: 50px;
+}
+
+.position-table tr {
+  height: 70px;
 }
 
 .detaillabel {
   width: 30%;
-  font-size: 30px;
+  font-size: 25px;
 }
 
 .detailInfo {
@@ -146,7 +172,6 @@ body{
   margin-top: 30px;
 }
 
-/* Main Search Form */
 .searchSubtitle {
   color: rgb(132, 82, 157);
   font-style: italic;
@@ -179,65 +204,47 @@ body{
 
 .search_by_button_grp {
   border: none;
-  margin-bottom: 30px;
-}
-
-.search_table, .search_result {
-  width: 100%;
+  margin-top: 30px;
 }
 
 .search_result {
+  margin-top: 30px;
+}
+
+.search_table, .search_result, .student_dashboard_table, .referrer_dashboard_table {
+  width: 100%;
+}
+
+.search_result, .student_dashboard_table, .referrer_dashboard_table {
   padding-left: 50px;
   padding-right: 50px;
 }
 
-h1 { 
-  font-family:cursive; 
+.welcomeBack{
+  font-family:cursive;
   font-size: 45px;
   font-weight: normal; 
   line-height: 48px;
-  margin: 0; 
-}
-
-.welcomeBack{
   margin-top: 20px;
   color:#5D0DD0;
 }
 
-.dashboard_table td,th, .search_result td, th{
+.student_dashboard_table td,th, .search_result td, th, .referrer_dashboard_table td, th{
     border: 1px solid #dddddd;
     text-align: left;
     padding: 8px;
-}
-
-.dashboard_table {
-  width: 90%;
 }
 
 .dashboard {
   color:purple;
 }
 
-.welcome_content{
+.student_dashboard_container, .referrer_dashboard_container{
   text-align: center;
-  border-style: double;
-
-}
-
-.referrer-dashboard-container {
-  padding: 20px;
   margin: auto;
-}
-
-.referrer-dashboard {
-    width: 45%;
-    float: left;
-}
-
-.referrer-detail {
-  width: 45%;
-  float: right;
-  /* padding: 20px; */
+  width: 100%;
+  height: 100%;
+  position: absolute;
 }
 
 .error {
@@ -245,6 +252,85 @@ h1 {
   font-weight: bold;
 }
 
+.success {
+  font-weight: bold;
+}
+
 .required{
   color:red;
+}
+
+.action {
+  width: 300px;
+}
+
+.change-status {
+  margin-bottom: 20px;
+}
+
+.status-form {
+  margin-bottom: 30px;
+}
+
+.status-form-label {
+  font-size: 20px;
+}
+
+.status-form-action {
+  margin-left:10px;
+  padding-left: 40px;
+  padding-right: 40px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-radius: 2em;
+  border-color: #8C55AA;
+}
+
+#result { 
+  z-index: 999;
+  width: 700px;
+  margin: 0 auto;
+}
+
+.result_matches tr {
+  font-size: 16px;
+  cursor: pointer;
+  border: #8C55AA;
+}
+
+#message_center_div {
+  margin-top: 20px;
+  border-radius: 2em;
+  width: 250px;
+  height: 700px;
+  background: rgb(217, 158, 249);
+  position: absolute;
+  z-index: 10;
+  display: none;
+}
+
+
+/* Below css are referenced from 
+   https://stackoverflow.com/questions/50409234/tooltip-inline-with-form-input
+  We also modified his version.
+*/
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 200px;
+  background-color: rgb(217, 158, 249);
+  color: black;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
 }

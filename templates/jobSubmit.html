@@ -1,0 +1,33 @@
+{% extends "baseHeader.html" %}
+{% block main %}
+
+<div class="reg-container">
+    <p class="login-title">Job Submission</p>
+    <form id="reg-form" method="POST" action= "{{url_for('jobs')}}">
+        <table class="reg-table">
+            <tr>
+                <td><label for="company">Company<span class="required">*</span></label></td>
+                <td><input class="regInput" type="text" id="company" name= "company" placeholder="Company Name" required></td>
+            </tr>
+            <tr>
+                <td><label for="pos_name">Position Name<span class="required">*</span></label></td>
+                <td><input class="regInput" id="pos_name" name="pos_name" placeholder="place enter one position name" required></td>
+            </tr>
+            <tr>
+                <td><label for="location">Position Location<span class="required">*</span></label></td>
+                <td><input class="regInput" id="location" name="location" placeholder="Enter Multiple Location in the form of City, State; City, State" required></td>
+            </tr>
+            <tr>
+                <td><label for="materialNeeded">Materials Needed<span class="required">*</span></label></td>
+                <td><input class="regInput" id="materialNeeded" name="materialNeeded" placeholder="Resume" required></td>
+            </tr>
+            <tr>
+                <td><label for="submitDeadline">Submission Deadline<span class="required">*</span></label></td>
+                    <td><input class="regInput" id="submitDeadline" type="date" name="submitDeadline" required></td>
+            </tr>
+        </table>
+        <input class="next" type="submit" value="Submit">
+    </form>
+</div>
+
+{% endblock %}

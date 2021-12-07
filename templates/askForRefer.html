@@ -1,0 +1,19 @@
+{% extends "detail_template.html" %}
+{% block content %}
+
+<form id="student-ask-for-refer-form" method="POST" action="{{url_for('ask_for_refer')}}">
+    <table class="referral-info-table">
+        <tr>
+            <td><label for="whyCompany">Why Company</label></td>
+            <td><textarea class="referInput" id="whyCompany" name="whyCompany" cols="40" rows="5" maxlength=500></textarea></td>
+        </tr>
+        <tr>
+            <td><label for="whyPosition">Why Position</label></td>
+            <td><textarea class="referInput" id="whyPosition" name="whyPosition" cols="40" rows="5" maxlength=500></textarea></td>
+        </tr>
+    </table>
+    <input class="detail_btn" type="submit" value="Submit">
+    <a href="{{ url_for('position_detail', pid=pid) }}" class="detail_btn">Back</a>
+</form>
+
+{% endblock %}

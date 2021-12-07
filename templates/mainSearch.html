@@ -4,13 +4,21 @@
 <table class="search_table">
     <tr>
         <td>
+            {% with message = get_flashed_messages() %}
+            {% if message %}
+            <div id="message">
+                <p class="error">{{message}}</p>
+            </div>
+            {% endif %}
+            {% endwith %}
+        </td>
+    </tr>
+    <tr>
+        <td>
             <div class="searchFormContainer">
                 <h1 class="searchTitle">Referral Database</h1>
                 <p class="searchSubtitle">Are you looking for a referral? Here is the right place for you!</p>
                 <form class="search" method="POST" action="{{url_for('mainSearch')}}">
-                    <input class="search_input" aria-label="Search" type="text" name="query"
-                        placeholder="Search for job position" required>
-                    <input type="submit" class="search_btn" value="Search">
                     <fieldset class="search_by_button_grp" id="radio_button_group">
                         <input type="radio" id="position_name" name="search_by" value="position" checked>
                         <label for="position_name">Position Name</label>
@@ -19,6 +27,11 @@
                         <input type="radio" id="company" name="search_by" value="company">
                         <label for="company">Company</label>
                     </fieldset>
+                    <input class="search_input" aria-label="Search" type="text" name="query"
+                        placeholder="Search for job position" id="search_input" required>
+                    <input type="submit" class="search_btn" value="Search">
+                    <div id="result">
+                    </div>
                 </form>
             </div>
         </td>
@@ -29,5 +42,8 @@
     {% block content %}
     {% endblock %}
 </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="{{ url_for('static',filename = 'search.js') }}"></script>
 
 {% endblock %}

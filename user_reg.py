@@ -2,12 +2,13 @@
 import cs304dbi as dbi
 import re
 
+# credit to: https://www.mygreatlearning.com/blog/regular-expression-in-python/
 regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
 
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'doc'}
 
 def insert_user_db(conn,name,email,password,year,account_type):
-    '''insert a new user into database, the password here is after salt'''
+    '''Insert a new user into database, the password here is after salt'''
     try: 
         curs = dbi.dict_cursor(conn)
         sql = '''INSERT INTO user (name, email, password,
@@ -19,7 +20,7 @@ def insert_user_db(conn,name,email,password,year,account_type):
         
 def insert_student_profile (conn,sid,name,major,minor,
     file,preferredLocation,description):
-    '''insert a new student into database'''
+    '''Insert a new student into database'''
     try: 
         curs = dbi.dict_cursor(conn)
         sql = '''INSERT INTO student (sid, name, major, minor, file,
@@ -31,7 +32,7 @@ def insert_student_profile (conn,sid,name,major,minor,
 
 def insert_referrer_profile(conn,rid,name,company,position,
     emailPrefer,otherContact,linkedin,phoneNumber):
-    '''insert a new referrer into database'''
+    '''Insert a new referrer into database'''
     try: 
         curs = dbi.dict_cursor(conn)
         sql = '''INSERT INTO referrer (rid,name,company,position,emailPrefer,
@@ -43,7 +44,7 @@ def insert_referrer_profile(conn,rid,name,company,position,
         print('something went wrong', repr(err))
 
 def insert_admin_profile(conn,aid):
-    ''' Retreive admin from admin table with provided aid'''
+    ''' Retreive admin from admin table with provided aid '''
     curs = dbi.dict_cursor(conn)
     sql = '''INSERT INTO admin (aid, name, major, minor,file,
     preferredLocation,description) VALUES (%s,%s,%s,%s,%s,%s,%s)'''    
@@ -78,11 +79,8 @@ def check_email(conn,email):
     curs = dbi.dict_cursor(conn)
     sql = '''select email from user where email = %s'''
     curs.execute(sql,[email])
-    if curs.fetchone() != None:
-        return True
-    else:
-        return False
-
+    return curs.fetchone() != None
+    
 def check_valid_email(conn, email):
     ''' Check if email is in valid format '''
     if(re.fullmatch(regex, email)):

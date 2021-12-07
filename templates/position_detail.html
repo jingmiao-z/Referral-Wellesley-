@@ -1,33 +1,81 @@
-<!-- checked -->
 {% extends "detail_template.html" %}
 {% block content %}
 
+{% with message = get_flashed_messages() %}
+{% if message %}
+<div id="message">
+    <p class="success">{{message}}</p>
+</div>
+{% endif %}
+{% endwith %}
+
 <div>
-    <h1 class = position_title>Software Engineer</h1>
+    <h1 class=position_title>{{ position.positionName }}</h1>
     <table class="position-table">
         <tr>
-            <td class="detaillabel"><label class="positionInfo">Location</label></td>
-            <td class="detailInfo"><p>Boston, MA</p></td>
+            <td class="detaillabel"><label class="positionInfo">Company</label></td>
+            <td class="detailInfo">
+                <p>{{ position.company }}</p>
+            </td>
         </tr>
         <tr>
-            <td class="detaillabel"><label class="positionInfo">Company</label></td>
-            <td class="detailInfo"><p>Google</p></td>
+            <td class="detaillabel"><label class="positionInfo">Location</label></td>
+            <td class="detailInfo">
+                <p>{{ position.postionLocation }}</p>
+            </td>
         </tr>
         <tr>
             <td class="detaillabel"><label class="positionInfo">Deadline</label></td>
-            <td class="detailInfo"><p>December-12-2021</p></td>
+            <td class="detailInfo">
+                <p>{{ position.submitDeadline }}</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="detaillabel"><label class="referrerName">Referrer Name</label></td>
+            <td class="detailInfo">
+                <p>{{ position.postionLocation }}</p>
+            </td>
         </tr>
         <tr>
             <td class="detaillabel"><label class="positionInfo">Material Needed</label></td>
-            <td class="detailInfo"><p>Resume</p></td>
+            <td class="detailInfo">
+                <p> {{ position.materialNeeded }}</p>
+            </td>
         </tr>
         <tr>
-            <td class="detaillabel"><label class="positionInfo">Contact Information</label></td>
-            <td class="detailInfo"><p>Linkedin</p></td>
+            <td class="detaillabel"><label class="positionInfo">Contact Email</label></td>
+            <td class="detailInfo">
+                <p>{{ referrer_contact.emailPrefer }}</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="detaillabel"><label class="positionInfo">Contact Phone Number</label></td>
+            <td class="detailInfo">
+                <p>{{ referrer_contact.phoneNumber }}</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="detaillabel"><label class="positionInfo">LinkedIn</label></td>
+            <td class="detailInfo">
+                <p>{{ referrer_contact.linkedin }}</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="detaillabel"><label class="positionInfo">Other Contact</label></td>
+            <td class="detailInfo">
+                <p>{{ referrer_contact.otherContact }}</p>
+            </td>
         </tr>
     </table>
 
-    <button onclick= "{{ url_for('mainSearch') }}">Back</button>
+    {% if ask %}
+    <a href="{{ url_for('mainSearch') }}" class="detail_btn">Back</a>
+    <a href="{{ url_for('ask_for_refer') }}" class="detail_btn">Ask For Refer</a>
+    {% endif %}
+
+    {% if dashboard %}
+    <a href="{{ url_for('welcome_student', uid = uid) }}" class="detail_btn">Back</a>
+    {% endif %}
 </div>
 
 {% endblock %}

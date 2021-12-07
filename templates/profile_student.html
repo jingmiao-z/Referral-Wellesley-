@@ -18,26 +18,26 @@
     <table class="student-table">
         <tr>
             <td><label for="major">Major<span class="required">*</span></label></td>
-            <td><input class="regInput" id="major" name="major" placeholder="Enter Your Major" value="{{major}}"
+            <td><input class="regInput" id="major" name="major" placeholder="Enter Your Major" value="{{dic.major}}"
                     required></td>
         </tr>
         <tr>
             <td><label for="minor">Minor</label></td>
-            <td><input class="regInput" id="minor" name="minor" placeholder="Enter Your Minor" value="{{minor}}"></td>
+            <td><input class="regInput" id="minor" name="minor" placeholder="Enter Your Minor" value="{{dic.minor}}"></td>
         </tr>
         <tr>
             <td><label for="prefLoc">Preferred Location</label></td>
             <td><input class="regInput" id="prefLoc" name="prefLoc" placeholder="Enter Your Preferrer Location"
-                    value="{{loc}}"></td>
+                    value="{{dic.preferredLocation}}"></td>
         </tr>
         <tr>
             <td><label for="description">Description</label></td>
             <td><input class="regInput" id="description" name="description"
-                    placeholder="Enter a Description of yourself" value="{{des}}"></td>
+                    placeholder="Enter a Description of yourself" value="{{dic.description}}"></td>
         </tr>
         <tr>
             <td><label for="resume">Resume<span class="required">*</span></label></td>
-            <td><input type="file" class="fileUpload" id="resume" name="resume" value="{{resume}}" required></td>
+            <td><input type="file" class="fileUpload" id="resume" name="resume" required></td>
         </tr>
     </table>
     <input class="save_profile" type="submit" value="Save Profile">

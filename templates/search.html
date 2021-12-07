@@ -4,16 +4,19 @@
 <div class="queryResult">
     {% if results %}
         <table class="search_result">
-            <th>Position Name</th>
-            <th>Company</th>
-            <th>Referrer</th>
-            <th>View Detail</th>
+            <tr>
+                <th>Position Name</th>
+                <th>Company</th>
+                <th>Referrer</th>
+                <th>View Detail</th>
+            </tr>
+            
             {% for result in results %}
             <tr>
                 <td>{{result.positionName}}</td>
                 <td>{{result.company}}</td>
                 <td>{{result.referrerName}}</td>
-                <td><button class="detailButton" type="button">View Detail</button>
+                <td><a href="{{ url_for('position_detail', pid = result.pid) }}" class="detailButton">View Detail</a></td>
             </tr>
             {% endfor %}
         </table>

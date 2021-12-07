@@ -1,0 +1,54 @@
+{% extends "detail_template.html" %}
+{% block content %}
+
+<div>
+    <h1 class=position_title>{{ dic.name }}</h1>
+    <table class="position-table">
+        <tr>
+            <td class="detaillabel"><label class="positionInfo">Major</label></td>
+            <td class="detailInfo">
+                <p>{{ dic.major }}</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="detaillabel"><label class="positionInfo">Minor</label></td>
+            <td class="detailInfo">
+                <p>{{ dic.minor }}</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="detaillabel"><label class="positionInfo">Description</label></td>
+            <td class="detailInfo">
+                <p>{{ dic.description }}</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="detaillabel"><label class="positionInfo">Why Position</label></td>
+            <td class="detailInfo">
+                <p>{{ dic.whyPosition }}</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="detaillabel"><label class="positionInfo">Why Company</label></td>
+            <td class="detailInfo">
+                <p>{{ dic.whyCompany }}</p>
+            </td>
+        </tr>
+    </table>
+
+    <form class="status-form" id="change-status-form" method="POST" action="{{url_for('student_detail', sid = sid, pid = pid )}}">
+        <label class="status-form-label" for="action">Select your action:</label>
+        <select class="status-form-action" id="action" name="action" required>
+            <option value="">Please Select</option>
+            <option value="accept">Accept</option>
+            <option value="reject">Decline</option>
+            <option value="sent">Sent</option>
+        </select>
+        <input class="status" name="submit" type="submit" value="Submit">
+    </form>
+
+    <a href="{{ url_for('welcome_referrer', uid = uid) }}" class="detail_btn">Back</a>
+
+</div>
+
+{% endblock %}

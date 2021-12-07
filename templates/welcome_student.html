@@ -3,35 +3,43 @@
 {% block header %}
 <a href="{{url_for('update_profile') }}" class="header_btn">Update Profile</a>
 <a href="{{ url_for('mainSearch')}}" class="header_btn">Search</a>
-
+<button id="message_center" class="dropdown_btn">Message Center</button>
+<div id="message_center_div" class="dropdown_content">
+</div>
 {% endblock %}
 
 {% block welcome_content %}
-<div>
-  <h1 class=welcomeBack>Welcome Back, Student!</h1>
+<div class="student_dashboard_container">
+  <h1 class="welcomeBack">Welcome, Student!</h1>
   <h2 class="dashboard">Your DashBoard</h2>
-  <table class=dashboard_table>
+
+  {% if msg %}
+  <div id="message">
+    <h1 class="error">{{ msg }}</h1>
+  </div>
+  {% endif %}
+
+  {% if positions %}
+  <table class="student_dashboard_table">
     <tr>
-      <th>Name</th>
-      <th>Details</th>
+      <th>Referrer Name</th>
+      <th>Company</th>
+      <th>Position Applied</th>
       <th>Status</th>
+      <th>Detail</th>
     </tr>
+    {% for position in positions %}
     <tr>
-      <td>Ally</td>
-      <td>SWE Application</td>
-      <td>Waiting</td>
+      <td>{{ position.referrerName }}</td>
+      <td>{{ position.company }}</td>
+      <td>{{ position.positionName }}</td>
+      <td>{{ position.referStatus }}</td>
+      <td><a href="{{ url_for('dashboard_position_detail', pid = position.pid) }}" class="detailButton">View Detail</a>
+      </td>
     </tr>
-    <tr>
-      <td>Sally</td>
-      <td>UI/UX Application</td>
-      <td>Accept</td>
-    </tr>
-    <tr>
-      <td>Name_sample</td>
-      <td>UI/UX Application</td>
-      <td>Decline</td>
-    </tr>
+    {% endfor %}
   </table>
+  {% endif %}
 </div>
 
 {% endblock %}
