@@ -34,6 +34,11 @@
                 <p>{{ dic.whyCompany }}</p>
             </td>
         </tr>
+        <tr>
+            <td class="detaillabel">
+                <a href="{{ url_for('download', filename=dic.file) }}">File Download</a>
+            </td>
+        </tr>
     </table>
 
     <form class="status-form" id="change-status-form" method="POST" action="{{url_for('student_detail', sid = sid, pid = pid )}}">

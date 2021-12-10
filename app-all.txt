@@ -1,4 +1,3 @@
-====================== app.py =====================
 from flask import (Flask, url_for, render_template, request, redirect, flash, session, send_from_directory, jsonify)
 import sys, os, random, io 
 import bcrypt
@@ -158,7 +157,6 @@ def profile_referrer(uid):
         session['logged_in'] = True
         return redirect(url_for('welcome_referrer', uid=uid))
 
-#profile route for referrer
 @app.route('/profile_student/<int:uid>', methods=['GET', 'POST'])
 def profile_student(uid):
     ''' This is our profile page for student. ''' 
@@ -416,7 +414,6 @@ def student_detail(sid,pid):
     conn = dbi.connect()
     session_uid = session['uid']
     if request.method == 'GET':
-        # why Position, WhyCompany
         dic = job_handler.student_detail(conn, sid)
         return render_template('student_detail.html',dic=dic, uid = session_uid,pid=pid,sid= sid )
     else:
@@ -438,7 +435,6 @@ def messageCenter():
         return jsonify({'empty': True, 'emptymsg': "No Notifications"})
     return jsonify({'empty': False, 'message': announcements})
 
-#NOT COMPLETELY FINISHED YET, SEE BETA VERSION
 @app.route('/keywords/<keyword>/<search_by>', methods=['GET'])
 def keywords(keyword, search_by):
     '''Route used for Ajax - autofill keywords when student search for positions to apply'''
@@ -456,6 +452,13 @@ def keywords(keyword, search_by):
             keywordLists = search_handler.get_matched_company_names(conn, keyword)
         return jsonify({'search_by': search_by, 'keywords': keywordLists})
 
+@app.route('/uploads/<path:filename>', methods=['GET', 'POST'])
+def download(filename):
+    ''' This method get file and allows the referrer to 
+    download student's resume file'''
+    upload_file = os.path.join(app.root_path, app.config['UPLOADS'])
+    return send_from_directory(directory=upload_file, path=filename)
+
 @app.before_first_request
 def startup():
     dbi.cache_cnf()
@@ -469,8 +472,6 @@ if __name__ == '__main__':
     app.run('0.0.0.0',uid)
 
 
-
-====================== job_handler.py =====================
 
 import cs304dbi as dbi
 
@@ -557,9 +558,7 @@ def change_status(conn,status,rid,sid,pid):
     sql = '''update refer set referStatus = %s where rid = %s and sid = %s and pid = %s'''
     # update refer set referStatus = "waiting" where rid = 2 and sid = 1 and pid = 1;
     curs.execute(sql,[status,rid,sid,pid])
-    conn.commit()
-====================== login_handler.py =====================
-
+    conn.commit()
 import cs304dbi as dbi
 
 def getPassword(conn, email):
@@ -574,8 +573,6 @@ def getPassword(conn, email):
         return ("","")
     return (result['password'], result['type'])
 
-
-====================== message_center.py =====================
 
 import cs304dbi as dbi
 
@@ -584,9 +581,7 @@ def retrieve_announcement(conn):
     curs = dbi.dict_cursor(conn)
     sql = 'select announceid, announcement from announce' 
     curs.execute(sql)
-    return curs.fetchall()
-====================== refer_handler.py =====================
-
+    return curs.fetchall()
 import cs304dbi as dbi
 
 def ask_for_refer(conn,rid, sid, pid, whyCompany, whyPosition):
@@ -604,9 +599,7 @@ def check_duplicate_request(conn, rid, sid, pid):
     curs = dbi.dict_cursor(conn)
     sql = '''select * from refer where rid = %s and sid = %s and pid = %s '''
     curs.execute(sql,[rid,sid,pid])
-    return curs.fetchone() != None
-====================== search_handler.py =====================
-
+    return curs.fetchone() != None
 import cs304dbi as dbi
 
 def searchByPosition(conn, query):
@@ -687,8 +680,6 @@ def get_matched_referrer_names(conn, keyword):
         from jobPosition where referrerName LIKE %s'''
     curs.execute(sql, ['%' + keyword + '%'])    
     return curs.fetchall()
-
-====================== update.py =====================
 
 import cs304dbi as dbi
 
@@ -725,9 +716,7 @@ def update_referrer_profile(conn,rid,company,position,emailPrefer,otherContact,l
             linkedin=%s, phoneNumber=%s
             where rid=%s'''
     curs.execute(sql,[company,position,emailPrefer,otherContact,linkedin,phoneNumber,rid])
-    conn.commit()
-====================== user_reg.py =====================
-
+    conn.commit()
 import cs304dbi as dbi
 import re
 
@@ -816,11 +805,7 @@ def check_valid_email(conn, email):
         return True
     else:
         print("Invalid Email")
-        return False
-====================== *.sql =====================
-
-====================== templates/askForRefer.html =====================
-{% extends "detail_template.html" %}
+        return False{% extends "detail_template.html" %}
 {% block content %}
 
 <form id="student-ask-for-refer-form" method="POST" action="{{url_for('ask_for_refer')}}">
@@ -838,9 +823,7 @@ def check_valid_email(conn, email):
     <a href="{{ url_for('position_detail', pid=pid) }}" class="detail_btn">Back</a>
 </form>
 
-{% endblock %}
-====================== templates/baseHeader.html =====================
-<!doctype html>
+{% endblock %}<!doctype html>
 <html lang='en'>
 
 <head>
@@ -865,9 +848,7 @@ def check_valid_email(conn, email):
 
     <script src="{{ url_for('static',filename = 'messageCenter.js') }}"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-</body>
-====================== templates/baseRegForm.html =====================
-<!doctype html>
+</body><!doctype html>
 <html lang='en'>
 <head>
     <meta charset='utf-8'>
@@ -918,9 +899,7 @@ def check_valid_email(conn, email):
         </form>
     </div>
 </body>
-</html>
-====================== templates/detail_template.html =====================
-<!doctype html>
+</html><!doctype html>
 <html lang='en'>
 <head>
     <meta charset='utf-8'>
@@ -935,11 +914,7 @@ def check_valid_email(conn, email):
         {% endblock %}
     </div>
 </body>
-</html>
-====================== templates/icon =====================
-
-====================== templates/jobSubmit.html =====================
-{% extends "baseHeader.html" %}
+</html>{% extends "baseHeader.html" %}
 {% block main %}
 
 <div class="reg-container">
@@ -971,9 +946,7 @@ def check_valid_email(conn, email):
     </form>
 </div>
 
-{% endblock %}
-====================== templates/login.html =====================
-<!doctype html>
+{% endblock %}<!doctype html>
 <html lang='en'>
 
 <head>
@@ -1005,9 +978,7 @@ def check_valid_email(conn, email):
     <!-- <a href="#">Forgot Username / Password?</a> -->
 </body>
 
-</html>
-====================== templates/mainSearch.html =====================
-{% extends "baseHeader.html" %}
+</html>{% extends "baseHeader.html" %}
 {% block main %}
 
 <table class="search_table">
@@ -1055,9 +1026,7 @@ def check_valid_email(conn, email):
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="{{ url_for('static',filename = 'search.js') }}"></script>
 
-{% endblock %}
-====================== templates/position_detail.html =====================
-{% extends "detail_template.html" %}
+{% endblock %}{% extends "detail_template.html" %}
 {% block content %}
 
 {% with message = get_flashed_messages() %}
@@ -1092,7 +1061,7 @@ def check_valid_email(conn, email):
         <tr>
             <td class="detaillabel"><label class="referrerName">Referrer Name</label></td>
             <td class="detailInfo">
-                <p>{{ position.postionLocation }}</p>
+                <p>{{ position.referrerName }}</p>
             </td>
         </tr>
         <tr>
@@ -1137,9 +1106,7 @@ def check_valid_email(conn, email):
     {% endif %}
 </div>
 
-{% endblock %}
-====================== templates/profile_referrer.html =====================
-{% extends "profile_template.html" %}
+{% endblock %}{% extends "profile_template.html" %}
 {% block content %}
 
 {% with message = get_flashed_messages() %}
@@ -1204,9 +1171,7 @@ def check_valid_email(conn, email):
         <input class="save_profile" type="submit" value="Save Profile">
     </form>
 
-    {% endblock %}
-====================== templates/profile_student.html =====================
-{% extends "profile_template.html" %}
+    {% endblock %}{% extends "profile_template.html" %}
 {% block content %}
 
 {% with message = get_flashed_messages() %}
@@ -1251,9 +1216,7 @@ def check_valid_email(conn, email):
     <input class="save_profile" type="submit" value="Save Profile">
 </form>
 
-{% endblock %}
-====================== templates/profile_template.html =====================
-<!doctype html>
+{% endblock %}<!doctype html>
 <html lang='en'>
 <head>
     <meta charset='utf-8'>
@@ -1269,9 +1232,7 @@ def check_valid_email(conn, email):
         {% endblock %}
     </div>
 </body>
-</html>
-====================== templates/search.html =====================
-{% extends "mainSearch.html" %}
+</html>{% extends "mainSearch.html" %}
 {% block content %}
 
 <div class="queryResult">
@@ -1304,8 +1265,6 @@ def check_valid_email(conn, email):
 </div>
 
 {% endblock %}
-
-====================== templates/student_detail.html =====================
 {% extends "detail_template.html" %}
 {% block content %}
 
@@ -1342,6 +1301,11 @@ def check_valid_email(conn, email):
                 <p>{{ dic.whyCompany }}</p>
             </td>
         </tr>
+        <tr>
+            <td class="detaillabel">
+                <a href="{{ url_for('download', filename=dic.file) }}">File Download</a>
+            </td>
+        </tr>
     </table>
 
     <form class="status-form" id="change-status-form" method="POST" action="{{url_for('student_detail', sid = sid, pid = pid )}}">
@@ -1359,9 +1323,7 @@ def check_valid_email(conn, email):
 
 </div>
 
-{% endblock %}
-====================== templates/welcome_admin.html =====================
-<!-- to be implemented  -->
+{% endblock %}<!-- to be implemented  -->
 {% extends "welcome.html" %}
 {% block welcome_content %}
 <p class="login-title">Announcement Submission</p>
@@ -1371,8 +1333,6 @@ def check_valid_email(conn, email):
         </form>
 
 {% endblock %}
-
-====================== templates/welcome.html =====================
 {% extends "baseHeader.html" %}
 {% block main %}
 
@@ -1381,9 +1341,7 @@ def check_valid_email(conn, email):
     {% endblock %}
 </div>
 
-{% endblock %}
-====================== templates/welcome_referrer.html =====================
-{% extends "welcome.html" %}
+{% endblock %}{% extends "welcome.html" %}
 
 {% block header %}
 <a href="{{ url_for('update_profile') }}" class="header_btn">Update Profile</a>
@@ -1426,9 +1384,7 @@ def check_valid_email(conn, email):
   {% endif %}
 </div>
 
-{% endblock %}
-====================== templates/welcome_student.html =====================
-{% extends "welcome.html" %}
+{% endblock %}{% extends "welcome.html" %}
 
 {% block header %}
 <a href="{{url_for('update_profile') }}" class="header_btn">Update Profile</a>
@@ -1472,9 +1428,7 @@ def check_valid_email(conn, email):
   {% endif %}
 </div>
 
-{% endblock %}
-====================== static/messageCenter.js =====================
-
+{% endblock %}
 // function called when user clicked on Message Center Button
 $(document).ready(function() {
     $("#message_center").click(function(){
@@ -1510,9 +1464,7 @@ $(document).mouseup(function(e) {
     {
         container.hide();
     }
-});
-====================== static/search.js =====================
-var searchRequest = null;
+});var searchRequest = null;
 var search_by = 'position';
 
 $('#radio_button_group input:radio').on('change', function () {
@@ -1586,9 +1538,7 @@ $(function () {
 // update the value in the search box (the value will be autofilled in the search bar)
 function setValue(value) {
     $("#search_input").val(value);
-}
-====================== static/style.css =====================
-body {
+}body {
   font-family: 'Open Sans', sans-serif;
   background:#F3EBF6;
   margin: 0 auto 0 auto;  
@@ -1923,4 +1873,4 @@ body {
 
 .tooltip:hover .tooltiptext {
   visibility: visible;
-}
+}

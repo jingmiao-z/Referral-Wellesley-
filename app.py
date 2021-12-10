@@ -157,7 +157,6 @@ def profile_referrer(uid):
         session['logged_in'] = True
         return redirect(url_for('welcome_referrer', uid=uid))
 
-#profile route for referrer
 @app.route('/profile_student/<int:uid>', methods=['GET', 'POST'])
 def profile_student(uid):
     ''' This is our profile page for student. ''' 
@@ -415,7 +414,6 @@ def student_detail(sid,pid):
     conn = dbi.connect()
     session_uid = session['uid']
     if request.method == 'GET':
-        # why Position, WhyCompany
         dic = job_handler.student_detail(conn, sid)
         return render_template('student_detail.html',dic=dic, uid = session_uid,pid=pid,sid= sid )
     else:
@@ -437,7 +435,6 @@ def messageCenter():
         return jsonify({'empty': True, 'emptymsg': "No Notifications"})
     return jsonify({'empty': False, 'message': announcements})
 
-#NOT COMPLETELY FINISHED YET, SEE BETA VERSION
 @app.route('/keywords/<keyword>/<search_by>', methods=['GET'])
 def keywords(keyword, search_by):
     '''Route used for Ajax - autofill keywords when student search for positions to apply'''
@@ -454,6 +451,13 @@ def keywords(keyword, search_by):
         else:
             keywordLists = search_handler.get_matched_company_names(conn, keyword)
         return jsonify({'search_by': search_by, 'keywords': keywordLists})
+
+@app.route('/uploads/<path:filename>', methods=['GET', 'POST'])
+def download(filename):
+    ''' This method get file and allows the referrer to 
+    download student's resume file'''
+    upload_file = os.path.join(app.root_path, app.config['UPLOADS'])
+    return send_from_directory(directory=upload_file, path=filename)
 
 @app.before_first_request
 def startup():
