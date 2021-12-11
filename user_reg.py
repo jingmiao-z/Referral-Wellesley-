@@ -43,14 +43,6 @@ def insert_referrer_profile(conn,rid,name,company,position,
     except Exception as err:
         print('something went wrong', repr(err))
 
-def insert_admin_profile(conn,aid):
-    ''' Retreive admin from admin table with provided aid '''
-    curs = dbi.dict_cursor(conn)
-    sql = '''INSERT INTO admin (aid, name, major, minor,file,
-    preferredLocation,description) VALUES (%s,%s,%s,%s,%s,%s,%s)'''    
-    curs.execute(sql,[sid,name,major,minor,file,preferredLocation,description])
-    conn.commit()
-
 def retrieve_user(conn, uid):
     ''' Retrieve user name from user table with provided uid '''
     curs = dbi.dict_cursor(conn)
