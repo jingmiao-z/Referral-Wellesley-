@@ -9,11 +9,14 @@
 {% endif %}
 {% endwith %}
 
+<h1 class = profile_title>Profile Settings</h1>
 {% if is_update %}
-<form id="student-profile-form" method="POST" action = "{{url_for('update_profile',uid = uid)}}" enctype="multipart/form-data">
+<form id="student-profile-form" method="POST" action="{{url_for('update_profile',uid = uid)}}"
+    enctype="multipart/form-data">
 {% endif %}
 {% if not is_update%}
-<form id="student-profile-form" method="POST" action = "{{url_for('profile_student',uid = uid)}}" enctype="multipart/form-data">
+<form id="student-profile-form" method="POST" action="{{url_for('profile_student',uid = uid)}}"
+    enctype="multipart/form-data">
 {% endif %}
     <table class="student-table">
         <tr>
@@ -23,7 +26,8 @@
         </tr>
         <tr>
             <td><label for="minor">Minor</label></td>
-            <td><input class="regInput" id="minor" name="minor" placeholder="Enter Your Minor" value="{{dic.minor}}"></td>
+            <td><input class="regInput" id="minor" name="minor" placeholder="Enter Your Minor"
+                    value="{{dic.minor}}"></td>
         </tr>
         <tr>
             <td><label for="prefLoc">Preferred Location</label></td>

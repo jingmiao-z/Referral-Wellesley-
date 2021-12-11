@@ -79,9 +79,11 @@ def student_detail(conn,sid):
 def change_status(conn,status,rid,sid,pid):
     '''change the refer status of in refer table according to what
     the referrer submitted in the form '''
-    # the method is not working properly 
-    curs = dbi.dict_cursor(conn)
-    sql = '''update refer set referStatus = %s where rid = %s and sid = %s and pid = %s'''
-    # update refer set referStatus = "waiting" where rid = 2 and sid = 1 and pid = 1;
-    curs.execute(sql,[status,rid,sid,pid])
-    conn.commit()
+    try:
+        curs = dbi.dict_cursor(conn)
+        sql = '''update refer set referStatus = %s 
+            where rid = %s and sid = %s and pid = %s'''
+        curs.execute(sql,[status,rid,sid,pid])
+        conn.commit()
+    except Exception as err:
+        print('something went wrong', repr(err))

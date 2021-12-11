@@ -6,22 +6,30 @@ $(document).ready(function() {
         function (data) {
             // Create a DOM
             let appendlist;
-            appendlist = $('<ul>', {'class': 'message_contents'});
+            appendlist = $('<li>', {'class': 'message_contents'});
             // if there is no notifications in the database
             if (data.empty) {
-                console.log(data.emptymsg);
                 appendlist.append($('<li>', {'class': 'error'}).text(data.emptymsg + " "));
+                appendlist.css({
+                    'margin': '20px 0px',
+                    'font-size': '25px',
+                    'list-style-type': 'none'
+                });
             // if there exits notifications in the database
             } else {
                 var list = data['message'];
-                console.log(list)
                 $.each(list, function (i, value) {
-                    appendlist.append($('<li>', {'class': 'message_content'}).text(value.announcement));
+                    appendlist.append($('<li>').text(value.announcement + " "))
                 })
+                appendlist.css({
+                    'margin': '10px 0px',
+                    'font-size': '20px',
+                    'list-style-type': 'square'
+                });
             }
             // show the message_center_div and display the DOM in html
             $('#message_center_div').show();
-            $('#message_contents').html(appendlist);
+            $('#message_center_div').html(appendlist);
         }
     );
     }); 

@@ -1,10 +1,38 @@
-<!-- to be implemented  -->
 {% extends "welcome.html" %}
 {% block welcome_content %}
-<p class="login-title">Announcement Submission</p>
-        <form id="announcement-form" method="" action="{{url_for('profile_admin')}}">
-            <p><label>Announcement <input type="text" placeholder="Enter your announcement there"></label><br>
-            <input class="next" type="submit" value="announcement">
-        </form>
+<div class="admin_dashboard_container">
+    <h1 class="welcomeBack">Welcome, Admin!</h1>
+    <h2 class="dashboard">Your DashBoard</h2>
 
+    {% with message = get_flashed_messages() %}
+        {% if message %}
+        <div id="message">
+            <p class="error">{{message}}</p>
+        </div>
+        {% endif %}
+    {% endwith %}
+
+    <p class="login-title">Announcement Submission</p>
+    <form id="announcement-form" method="POST" action="{{ url_for('submit_announcement') }}">
+        <textarea class="announcement" name="announcement" id="announcement"
+            placeholder="Enter your announcement there" cols="40" rows="7" maxlength=1000></textarea>
+        <br>
+        <input class="send_announce" type="submit" value="Send Announcement">
+    </form>
+
+    {% if announcements %}
+    <table class="admin_dashboard_table">
+        <tr>
+            <th>ID</th>
+            <th>Announcement</th>
+        </tr>
+        {% for announce in announcements %}
+        <tr>
+            <td>{{ announce.announceid }}</td>
+            <td>{{ announce.announcement }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+</div>
 {% endblock %}

@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang='en'>
+
 <head>
     <meta charset='utf-8'>
     <meta name=author content="Annie Liu">
@@ -11,17 +12,17 @@
 
     {% if msg %}
     <div id="message">
-        <p class = "error">{{msg}}</p>
+        <p class="error">{{msg}}</p>
     </div>
     {% endif %}
 
     <div class="reg-container">
         <p class="login-title">Registration</p>
-        <form id="reg-form" method="POST" action= "{{url_for('base_registration')}}">
+        <form id="reg-form" method="POST" action="{{url_for('base_registration')}}">
             <table class="reg-table">
                 <tr>
                     <td><label for="name">Name<span class="required">*</span></label></td>
-                    <td><input class="regInput" type="text" id="name" name= "name" placeholder="Name" required></td>
+                    <td><input class="regInput" type="text" id="name" name="name" placeholder="Name" required></td>
                 </tr>
                 <tr>
                     <td><label for="email">Email<span class="required">*</span></label></td>
@@ -35,18 +36,25 @@
                     <td><label for="classyear">Class year<span class="required">*</span></label></td>
                     <td><input class="regInput" id="classyear" type="number" name="classyear" required></td>
                 </tr>
+                {% if notAdmin %}
                 <tr>
                     <td><label for="accountType">Account type<span class="required">*</span></label></td>
                     <td><select class="regInput" id="accountType" name="accountType" required>
-                        <option value="">select</option>
-                        <option value="Student">Student Account</option>
-                        <option value="Referrer">Referrer Account</option>
-                        <option value="Admin">Admin</option>
-                    </select></td>
+                            <option value="">select</option>
+                            <option value="Student">Student Account</option>
+                            <option value="Referrer">Referrer Account</option>
+                        </select></td>
                 </tr>
+                {% endif %}
             </table>
+            {% if notAdmin %}
             <input class="next" type="submit" value="Next">
+            {% endif %}
+            {% if admin %}
+            <input class="next" type="submit" value="Submit">
+            {% endif %}
         </form>
     </div>
 </body>
+
 </html>

@@ -51,12 +51,16 @@ def login():
                         session['uid'] = uid 
                         session['email']  = email
                         session['account_type'] = user_type
+                        session['admin'] = 'No' 
                         session['logged_in'] = True
                         if user_type == 'Student':
+                            session['admin'] = 'No' 
                             return redirect(url_for('welcome_student', uid=uid))
                         elif user_type == 'Referrer':
+                            session['admin'] = 'No' 
                             return redirect(url_for('welcome_referrer', uid=uid))
                         else:
+                            session['admin'] = 'Yes' 
                             return redirect(url_for('welcome_admin', uid=uid))
                     else:
                         flash("Incorrect password. Please try again.")
@@ -65,15 +69,18 @@ def login():
                     flash("Account not found. Please register.")
                     return render_template('login.html')
             else:
-                return redirect(url_for('base_registration'))
+                return redirect(url_for('register_admin'))
     else:
         # case 3: a regular visit ？
         if request.method == "GET":
             if session_account_type == 'Student':
+                session['admin'] = 'No' 
                 return redirect(url_for('welcome_student', uid=session_uid))
             elif session_account_type == 'Referrer':
+                session['admin'] = 'No' 
                 return redirect(url_for('welcome_referrer', uid=session_uid))
             else:
+                session['admin'] = 'Yes' 
                 return redirect(url_for('welcome_admin', uid=session_uid))
 
 #logout route, pop all the sessions
@@ -84,6 +91,7 @@ def logout():
         session.pop('uid')
         session.pop('email')
         session.pop('account_type')
+        session.pop('admin')
         session['logged_in'] = False
         flash('You are logged out.')
         return redirect(url_for('login'))
@@ -91,12 +99,33 @@ def logout():
         flash('You are not logged in. Please login.')
         return redirect(url_for('login'))
 
+@app.route('/register_admin/', methods=['GET','POST'])
+def register_admin():
+    ''' '''
+    conn = dbi.connect()
+    if request.method == 'GET':
+        return render_template('ask_register_admin.html')
+    else:
+        register_for_admin = request.form.get('register_admin')
+        if register_for_admin == "Yes":
+            session['admin'] = 'Yes'
+        else:
+            session['admin'] = 'No'
+        return redirect(url_for('base_registration'))
+
 @app.route('/base_registration/',methods=['GET', 'POST'])
 def base_registration():
     ''' This is our base registration page. '''
+    if 'admin' not in session:
+        return redirect(url_for('register_admin'))
+
     conn = dbi.connect()
+    isAdmin = session['admin'] 
     if request.method == 'GET':
-        return render_template('baseRegForm.html')
+        if isAdmin == 'Yes':
+            return render_template('baseRegForm.html', admin = isAdmin)
+        else:
+            return render_template('baseRegForm.html', notAdmin = isAdmin)
     else:
         # get parameters from the form
         name = request.form.get('name')
@@ -105,32 +134,37 @@ def base_registration():
         # if email format is invalid
         if not user_reg.check_valid_email(conn, email):
             msg = 'Incorrect email format. Please re-enter.'
-            return render_template('baseRegForm.html', msg=msg)
+            return render_template('baseRegForm.html', msg=msg, isAdmin = isAdmin)
         # if email already exist, cannot re-register 
         if user_reg.check_email(conn,email):
             flash('Email exists, please sign in instead')
             return redirect(url_for("login"))
-        year = request.form.get('classyear')
-        accountType = request.form.get('accountType')
         # hash the password
         hashed = bcrypt.hashpw(password.encode('utf-8'),
                     bcrypt.gensalt())
         stored_password = hashed.decode('utf-8')
+        year = request.form.get('classyear')
+        
+        if isAdmin == 'Yes':
+            accountType = "Admin"
+        else:
+            accountType = request.form.get('accountType')
+
         # insert a new user into the database
         user_reg.insert_user_db(conn,name,email,stored_password,year,accountType)
         # retrieve the user's uid from the database
         uid = int(user_reg.retrieve_uid(conn,email))
+        session['uid'] = uid 
+        session['email']  = email
+        session['account_type'] = accountType
+        session['logged_in'] = True
         # determine what page to be redirected
         if accountType ==  "Student":
-            session['uid'] = uid 
-            session['email']  = email
-            session['account_type'] = accountType
             return redirect(url_for("profile_student", uid = uid))
         elif accountType ==  "Referrer":
-            session['uid'] = uid 
-            session['email']  = email
-            session['account_type'] = accountType
             return redirect(url_for("profile_referrer", uid = uid))
+        else:
+            return redirect(url_for("welcome_admin", uid = uid))
 
 @app.route('/profile_referrer/<int:uid>', methods=['GET', 'POST'])
 def profile_referrer(uid):
@@ -157,7 +191,6 @@ def profile_referrer(uid):
         session['logged_in'] = True
         return redirect(url_for('welcome_referrer', uid=uid))
 
-#profile route for referrer
 @app.route('/profile_student/<int:uid>', methods=['GET', 'POST'])
 def profile_student(uid):
     ''' This is our profile page for student. ''' 
@@ -283,13 +316,35 @@ def welcome_referrer(uid):
         return render_template('welcome_referrer.html', msg=msg)
     return render_template('welcome_referrer.html',uid=uid,results = results)
 
-@app.route('/welcome_admin/<int:uid>')
+@app.route('/welcome_admin/<int:uid>', methods=['GET'])
 def welcome_admin(uid):
     ''' This method is used for admin dashboard'''
     if not session['logged_in']:
         return redirect(url_for('logout'))
     conn = dbi.connect()
-    return render_template('welcome_admin.html')
+    uid = session['uid']
+    account_type = session['account_type']
+    announcements = message_center.retrieve_announcement_by_admin(conn, uid,account_type)
+    return render_template('welcome_admin.html', announcements = announcements)
+
+@app.route('/submit_announcement/', methods=['GET', 'POST'])
+def submit_announcement():
+    ''' This method is used for admin to submit announcement'''
+    if not session['logged_in']:
+        return redirect(url_for('logout'))
+    conn = dbi.connect()
+    uid = session['uid']
+    if request.method == 'GET':
+        return redirect(url_for('welcome_admin', uid = uid))
+    else:
+        try:
+            announcement = request.form.get('announcement')
+            message_center.admin_make_announce(conn, aid, announcement)
+            flash("Announcement successfully sent!")
+            return redirect(url_for('welcome_admin', uid=uid))
+        except Exception as err:
+            flash("Send announcement failed. Please try again.")
+            return redirect(url_for('welcome_admin', uid=uid))
 
 @app.route('/dashboard/', methods=['GET'])
 def dashboard():
@@ -303,6 +358,8 @@ def dashboard():
         return redirect(url_for('welcome_student', uid=session_uid))
     elif session_account_type == "Referrer":
         return redirect(url_for('welcome_referrer', uid=session_uid))
+    else:
+        return redirect(url_for('welcome_admin', uid=session_uid))
     
 @app.route('/mainSearch/', methods=['GET', 'POST'])
 def mainSearch():
@@ -378,6 +435,7 @@ def ask_for_refer():
                 whyCompany = request.form['whyCompany']
                 whyPosition = request.form['whyPosition']
                 refer_handler.ask_for_refer(conn, rid, session_uid, pid, whyCompany, whyPosition)
+                message_center.referrer_notification(conn,rid,pid,session_uid)
                 flash("Successfully submit a request for an referral. Please go to your dashboard for status update.")
                 session.pop('jobInfo')
                 return redirect(url_for('mainSearch'))
@@ -422,22 +480,22 @@ def student_detail(sid,pid):
         status = request.form.get('action')
         rid = session_uid
         job_handler.change_status(conn,status,rid,sid,pid)
+        message_center.student_notification(conn,status,rid,sid,pid)
         return redirect(url_for('welcome_referrer', uid=session_uid))
 
-#NOT IMPLEMENTED YET, SEE BETA VERSION
 @app.route('/messageCenter/', methods=['GET'])
 def messageCenter():
-    '''Route for message Center, not implemented yet. DO NOT GRADE'''
+    '''Route for message Center'''
     if not session['logged_in']:
         return redirect(url_for('logout'))
     conn = dbi.connect()
-    announcements = message_center.retrieve_announcement(conn)
-    print(announcements)
+    uid = session["uid"]
+    account_type = session["account_type"]
+    announcements = message_center.retrieve_announcement(conn,uid,account_type)
     if not announcements:
         return jsonify({'empty': True, 'emptymsg': "No Notifications"})
     return jsonify({'empty': False, 'message': announcements})
 
-#NOT COMPLETELY FINISHED YET, SEE BETA VERSION
 @app.route('/keywords/<keyword>/<search_by>', methods=['GET'])
 def keywords(keyword, search_by):
     '''Route used for Ajax - autofill keywords when student search for positions to apply'''
@@ -455,6 +513,12 @@ def keywords(keyword, search_by):
             keywordLists = search_handler.get_matched_company_names(conn, keyword)
         return jsonify({'search_by': search_by, 'keywords': keywordLists})
 
+@app.route('/uploads/<path:filename>', methods=['GET', 'POST'])
+def download(filename):
+    ''' Route for get the file and downloading the file.'''
+    upload_file = os.path.join(app.root_path, app.config['UPLOADS'])
+    return send_from_directory(directory=upload_file, path=filename)
+    
 @app.before_first_request
 def startup():
     dbi.cache_cnf()

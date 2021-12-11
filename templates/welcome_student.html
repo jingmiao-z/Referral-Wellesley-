@@ -4,8 +4,8 @@
 <a href="{{url_for('update_profile') }}" class="header_btn">Update Profile</a>
 <a href="{{ url_for('mainSearch')}}" class="header_btn">Search</a>
 <button id="message_center" class="dropdown_btn">Message Center</button>
-<div id="message_center_div" class="dropdown_content">
-</div>
+<ul id="message_center_div" class="dropdown_content">
+</ul>
 {% endblock %}
 
 {% block welcome_content %}
@@ -42,4 +42,9 @@
   {% endif %}
 </div>
 
+{% endblock %}
+
+{% block js %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="{{ url_for('static',filename = 'messageCenter.js') }}"></script>
 {% endblock %}

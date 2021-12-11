@@ -1,0 +1,21 @@
+{% extends "profile_template.html" %}
+{% block content %}
+
+{% with message = get_flashed_messages() %}
+{% if message %}
+<div id="message">
+    <p class="error">{{message}}</p>
+</div>
+{% endif %}
+{% endwith %}
+
+<form id="admin-form" method="POST" action="{{url_for('profile_admin')}}">
+    <table class="admin-table">
+        <tr>
+            <td><label for="admin">Please enter the admin secret code: <span class="required">*</span></label></td>
+            <td><input class="admin" id="admin" name="admin_pass" required></td>
+        </tr>
+    </table>
+    <input class="save_profile" type="submit" value="Submit">
+</form>
+{% endblock %}

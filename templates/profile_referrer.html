@@ -9,6 +9,7 @@
 {% endif %}
 {% endwith %}
 
+<h1 class = profile_title>Profile Settings</h1>
 {% if is_update %}
 <form id="referrer-profile-form" method="POST" action="{{url_for('update_profile', uid = uid )}}">
     {% endif %}
