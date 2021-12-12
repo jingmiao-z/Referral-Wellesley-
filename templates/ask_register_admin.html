@@ -1,14 +1,23 @@
 {% extends "profile_template.html" %}
 {% block content %}
 
+{% with message = get_flashed_messages() %}
+{% if message %}
+<br>
+<div id="message">
+    <p class="error">{{message}}</p>
+</div>
+{% endif %}
+{% endwith %}
+
 <p class="login-title">Registration</p>
 <form id="register-admin-form" method="POST" action="{{url_for('register_admin')}}">
     <fieldset class="is_admin_registration" id="radio_button_group">
         <p>Are you registering for Admin Account?</p>
         <input type="radio" id="register_admin" name="register_admin" value="Yes">
         <label class="register_admin_radio" for="register_admin">Yes</label>
-        <input type="radio" id="register_admin" name="register_admin" value="No" checked>
-        <label for="register_admin">No</label>
+        <input type="radio" id="register_admin_not" name="register_admin" value="No" checked>
+        <label for="register_admin_not">No</label>
     </fieldset>
     <input class="save_result" type="submit" value="Submit">
 </form>

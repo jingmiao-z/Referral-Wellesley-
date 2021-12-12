@@ -1,0 +1,25 @@
+{% extends "profile_template.html" %}
+
+
+{% block content %}
+
+{% with message = get_flashed_messages() %}
+{% if message %}
+<br>
+<div id="message">
+    <p class="error">{{message}}</p>
+</div>
+{% endif %}
+{% endwith %}
+
+<p class="login-title">Registration</p>
+<form id="register-admin-form" method="POST" action="{{url_for('admin_passcode')}}">
+    <p>
+        Please enter the admin secret passcode for registration: 
+    </p>
+    <input class="regInput" id="admin_passcode" name="admin_passcode">
+
+    <input class="signIn" type="submit" value="Next">
+</form>
+<a href="{{url_for('register_admin')}}" class="signUp">Back</a>
+{% endblock %}

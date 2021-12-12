@@ -2,20 +2,20 @@
 import cs304dbi as dbi
 
 def student_notification(conn,status,rid,sid,pid):
-    '''store the notification in announcement in student with sid given when referrers change status'''
+    '''store the notification in announcement in student with sid 
+        given when referrers change status'''
     try:
         curs = dbi.dict_cursor(conn)
         sql = 'select referrerName, positionName from jobPosition where pid = %s'
         curs.execute(sql,[pid])
         dic = curs.fetchone() 
-        announcement = "Referrer " + dic["referrerName"] + " " 
-        + status + " your referral application for position " 
-        + dic["positionName"]
-        #see app.py 424
+        announcement = "Referrer " + dic["referrerName"] + " "
+        announcement += status + " your referral application for position "
+        announcement += dic["positionName"]
         sql = '''INSERT INTO announce (announcement, type, announcement_target) 
                 VALUES (%s,"Student",%s)'''
-        curs.execute(sql,[announcement,"Student",sid])
-        curs.commit()
+        curs.execute(sql,[announcement,sid])
+        conn.commit()
     except Exception as err:
         print('something went wrong', repr(err))
 
@@ -28,13 +28,11 @@ def referrer_notification(conn,rid,pid,sid):
         curs.execute(sql,[pid])
         dic = curs.fetchone() 
         positionName = dic["positionName"]
-        #381
         sql = '''select name from student where sid = %s'''
         curs.execute(sql,[sid])
         dic = curs.fetchone() 
         studentName = dic["name"]
-        announcement = "Student " + studentName + 
-        " has applied for referral for position " + positionName
+        announcement = "Student " + studentName + " has applied for referral for position " + positionName
         sql = '''INSERT INTO announce (announcement, type, announcement_target) 
                 VALUES (%s,"Referrer",%s)'''
         curs.execute(sql,[announcement,rid])
@@ -51,7 +49,6 @@ def retrieve_announcement(conn,uid,account_type):
     sql = '''select announcement from announce
             where (type = %s and announcement_target = %s) or type = 'All'
             order by announceid desc limit 5'''
-    print(sql)
     curs.execute(sql,[account_type,uid])
     return curs.fetchall()
 

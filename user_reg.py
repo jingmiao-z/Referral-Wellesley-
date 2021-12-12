@@ -88,3 +88,10 @@ def check_valid_email(conn, email):
     else:
         print("Invalid Email")
         return False
+
+def get_admin_secret_passcode(conn):
+    ''' Get the admin secret passcode from our database.'''
+    curs = dbi.dict_cursor(conn)
+    sql = '''select password from admin_key'''
+    curs.execute(sql)
+    return curs.fetchone()

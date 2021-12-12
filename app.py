@@ -101,7 +101,7 @@ def logout():
 
 @app.route('/register_admin/', methods=['GET','POST'])
 def register_admin():
-    ''' '''
+    ''' This ask the users whether they are register for admin account type. '''
     conn = dbi.connect()
     if request.method == 'GET':
         return render_template('ask_register_admin.html')
@@ -109,14 +109,16 @@ def register_admin():
         register_for_admin = request.form.get('register_admin')
         if register_for_admin == "Yes":
             session['admin'] = 'Yes'
+            return redirect(url_for('admin_passcode'))
         else:
             session['admin'] = 'No'
-        return redirect(url_for('base_registration'))
+            return redirect(url_for('base_registration'))
 
 @app.route('/base_registration/',methods=['GET', 'POST'])
 def base_registration():
     ''' This is our base registration page. '''
     if 'admin' not in session:
+        flash('Please select your account type first. ')
         return redirect(url_for('register_admin'))
 
     conn = dbi.connect()
@@ -165,6 +167,32 @@ def base_registration():
             return redirect(url_for("profile_referrer", uid = uid))
         else:
             return redirect(url_for("welcome_admin", uid = uid))
+
+@app.route('/admin_passcode/', methods=['GET', 'POST'])
+def admin_passcode():
+    ''' Only users with the admin secret passcode can proceed to the 
+        admin registration process. Only internal user will know the 
+        admin secret passcode. This route checks whether the 
+        user have the admin secret code.'''
+    if 'admin' not in session:
+        flash('Please select your account type first. ')
+        return redirect(url_for('register_admin'))
+
+    conn = dbi.connect()
+    if request.method == 'GET':
+        return render_template('admin_passcode_page.html')
+    else:
+        input_admin_pass = request.form.get('admin_passcode')
+        # get the admin secret passcode from database
+        stored = user_reg.get_admin_secret_passcode(conn)['password']
+        # hash the input password
+        hashedInput = bcrypt.hashpw(input_admin_pass.encode('utf-8'), stored.encode('utf-8'))
+        hashedInputPass = hashedInput.decode('utf-8')
+        if hashedInputPass == stored:
+            return redirect(url_for('base_registration'))
+        else: 
+            flash('Incorrect admin secret passcode. Please try again or reselect the account type.')
+            return render_template('admin_passcode_page.html')
 
 @app.route('/profile_referrer/<int:uid>', methods=['GET', 'POST'])
 def profile_referrer(uid):
@@ -324,7 +352,7 @@ def welcome_admin(uid):
     conn = dbi.connect()
     uid = session['uid']
     account_type = session['account_type']
-    announcements = message_center.retrieve_announcement_by_admin(conn, uid,account_type)
+    announcements = message_center.retrieve_announcement_by_admin(conn, uid)
     return render_template('welcome_admin.html', announcements = announcements)
 
 @app.route('/submit_announcement/', methods=['GET', 'POST'])
@@ -333,7 +361,7 @@ def submit_announcement():
     if not session['logged_in']:
         return redirect(url_for('logout'))
     conn = dbi.connect()
-    uid = session['uid']
+    aid = session['uid']
     if request.method == 'GET':
         return redirect(url_for('welcome_admin', uid = uid))
     else:
@@ -487,14 +515,14 @@ def student_detail(sid,pid):
 def messageCenter():
     '''Route for message Center'''
     if not session['logged_in']:
-        return redirect(url_for('logout'))
+        return jsonify({'logout': True, 'empty': True, 'emptymsg': "No Notifications"})
     conn = dbi.connect()
     uid = session["uid"]
     account_type = session["account_type"]
     announcements = message_center.retrieve_announcement(conn,uid,account_type)
     if not announcements:
-        return jsonify({'empty': True, 'emptymsg': "No Notifications"})
-    return jsonify({'empty': False, 'message': announcements})
+        return jsonify({'logout': False, 'empty': True, 'emptymsg': "No Notifications"})
+    return jsonify({'logout': False, 'empty': False, 'message': announcements})
 
 @app.route('/keywords/<keyword>/<search_by>', methods=['GET'])
 def keywords(keyword, search_by):
